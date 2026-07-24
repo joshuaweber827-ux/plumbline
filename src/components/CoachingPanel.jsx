@@ -17,7 +17,7 @@ export function CoachingPanel({ checkpoints }) {
         ))}
       </div>
       <p className="coaching-disclaimer">
-        Estimates from single-camera pose detection — directional feedback, not a substitute for an in-person lesson.
+        These tips come from tracking your movement on video — a helpful starting point, not a replacement for a coach.
       </p>
     </div>
   )

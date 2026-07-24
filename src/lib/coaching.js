@@ -22,22 +22,22 @@ export function generateCoachingTips(checkpoints) {
         tips.push({
           id: 'tempo-fast-downswing',
           severity: 'watch',
-          title: 'Downswing looks rushed',
-          detail: `Backswing-to-downswing tempo is about ${ratio.toFixed(1)}:1 (tour average is close to 3:1). Let the transition settle before accelerating into the ball.`,
+          title: 'Try slowing down at the top',
+          detail: 'Your downswing happens much faster than your backswing. Pause briefly at the top before starting down — it usually helps timing.',
         })
       } else if (ratio > TEMPO_TARGET + TEMPO_TOLERANCE) {
         tips.push({
           id: 'tempo-slow-downswing',
           severity: 'watch',
-          title: 'Tempo is backswing-heavy',
-          detail: `Backswing-to-downswing tempo is about ${ratio.toFixed(1)}:1, slower than the ~3:1 tour average. A bit more commitment through impact can add speed.`,
+          title: 'Be more decisive coming down',
+          detail: "You take your time going back, then ease into the ball. Try committing to the downswing a bit more — it's often where speed gets lost.",
         })
       } else {
         tips.push({
           id: 'tempo-good',
           severity: 'good',
-          title: 'Solid tempo ratio',
-          detail: `Backswing-to-downswing tempo is about ${ratio.toFixed(1)}:1 — right in the range tour pros average.`,
+          title: 'Good rhythm',
+          detail: 'The pace of your backswing and downswing are well matched — that timing is a big part of a repeatable swing.',
         })
       }
     }
@@ -49,15 +49,15 @@ export function generateCoachingTips(checkpoints) {
       tips.push({
         id: 'spine-stability-watch',
         severity: 'watch',
-        title: 'Losing posture through impact',
-        detail: `Spine tilt shifted about ${delta.toFixed(1)}° between setup and impact. Holding your setup angle into the ball tends to improve contact consistency.`,
+        title: 'Try holding your posture longer',
+        detail: "Your body position at impact looks noticeably different from your setup. Try keeping the same forward bend you started with all the way through the ball — it usually leads to more solid contact.",
       })
     } else {
       tips.push({
         id: 'spine-stability-good',
         severity: 'good',
-        title: 'Stable spine angle',
-        detail: `Spine tilt only shifted about ${delta.toFixed(1)}° from setup to impact — good posture retention.`,
+        title: 'Good, steady posture',
+        detail: 'Your body position barely changes from setup to impact — that consistency helps you strike the ball the same way every time.',
       })
     }
   }
@@ -68,8 +68,8 @@ export function generateCoachingTips(checkpoints) {
       tips.push({
         id: 'top-sway',
         severity: 'watch',
-        title: 'Big upper-body shift on the backswing',
-        detail: `Spine tilt moved about ${delta.toFixed(1)}° from setup to the top. If that looks like a sway or reverse tilt on video, focus on turning around a steadier spine angle.`,
+        title: 'Watch for swaying off the ball',
+        detail: "Your upper body shifts a good amount going back. Try to turn in place rather than sliding side to side — it'll help you stay centered over the ball.",
       })
     }
   }
@@ -80,8 +80,8 @@ export function generateCoachingTips(checkpoints) {
       tips.push({
         id: 'plane-consistency',
         severity: 'watch',
-        title: 'Plane shifts late in the backswing',
-        detail: `The wrist-line angle changes about ${delta.toFixed(1)}° between mid-backswing and the top. A late steepening or flattening can make the downswing plane harder to repeat.`,
+        title: 'Backswing path could be more consistent',
+        detail: 'Your hands and arms change direction noticeably right near the top of your backswing. A smoother, more consistent path back tends to make the downswing easier to repeat.',
       })
     }
   }
@@ -90,8 +90,8 @@ export function generateCoachingTips(checkpoints) {
     tips.push({
       id: 'no-signal',
       severity: 'info',
-      title: 'Not enough confident keypoints',
-      detail: 'Pose detection didn’t find enough confident joints at these checkpoints to generate feedback. Try a clearer, well-lit video with the golfer fully in frame.',
+      title: "Couldn't get a clear read on your swing",
+      detail: "We didn't detect your body clearly enough at key moments to give feedback. Try a well-lit video with your full body in frame, from address to follow-through.",
     })
   }
 
