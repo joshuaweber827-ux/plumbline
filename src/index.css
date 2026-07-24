@@ -1,0 +1,70 @@
+:root {
+  --turf-dark: #16281b;
+  --turf-light: #1e3524;
+  --chalk: #f4f1e4;
+  --chalk-dim: #d8d4c2;
+  --flag-orange: #c4502e;
+  --flag-orange-bright: #de6640;
+  --sand: #cbb88b;
+  --ink: #0f1c12;
+  --line: rgba(244, 241, 228, 0.14);
+  --shadow: rgba(0, 0, 0, 0.35) 0 12px 30px -10px;
+
+  --font-display: 'Oswald', 'Arial Narrow', sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+
+  color-scheme: dark;
+  font-family: var(--font-body);
+  color: var(--chalk);
+  background: var(--turf-dark);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: radial-gradient(circle at 15% -10%, var(--turf-light), transparent 55%),
+    linear-gradient(160deg, var(--turf-dark) 0%, #142418 55%, #101f15 100%);
+  background-attachment: fixed;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--chalk);
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  font-family: var(--font-body);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+::selection {
+  background: var(--flag-orange);
+  color: var(--chalk);
+}

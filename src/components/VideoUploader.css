@@ -1,0 +1,44 @@
+.uploader-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.uploader-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 28px 24px;
+  border: 2px dashed var(--sand);
+  border-radius: 10px;
+  background: rgba(203, 184, 139, 0.08);
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.uploader-dropzone:hover,
+.uploader-input:focus-visible + .uploader-dropzone {
+  background: rgba(203, 184, 139, 0.16);
+  border-color: var(--flag-orange-bright);
+}
+
+.uploader-icon {
+  font-size: 28px;
+}
+
+.uploader-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--chalk);
+}
+
+.uploader-hint {
+  font-size: 13px;
+  color: var(--chalk-dim);
+}

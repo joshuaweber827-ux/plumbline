@@ -1,0 +1,55 @@
+.video-stage {
+  width: 100%;
+}
+
+.video-stage-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #0a1410;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.video-stage-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #0a1410;
+}
+
+.video-stage-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.video-stage-annotation.is-drawable {
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+.video-stage-status {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 28, 18, 0.72);
+  color: var(--sand);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-align: center;
+  padding: 16px;
+}
+
+.video-stage-status-error {
+  color: var(--flag-orange-bright);
+}

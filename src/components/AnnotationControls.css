@@ -1,0 +1,45 @@
+.annotation-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.annotation-hint {
+  font-size: 12px;
+  color: var(--chalk-dim);
+}
+
+.annotation-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.annotation-count {
+  font-size: 12px;
+  color: var(--sand);
+  margin-right: 4px;
+}
+
+.annotation-btn {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--chalk);
+  cursor: pointer;
+}
+
+.annotation-btn:hover:not(:disabled) {
+  border-color: var(--sand);
+  background: rgba(203, 184, 139, 0.1);
+}
+
+.annotation-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}

@@ -1,0 +1,45 @@
+.app {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.app-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.app-title {
+  font-size: 42px;
+  letter-spacing: 0.06em;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-title::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 34px;
+  background: var(--flag-orange);
+  border-radius: 2px;
+}
+
+.app-subtitle {
+  font-size: 14px;
+  color: var(--chalk-dim);
+  margin-left: 18px;
+}
+
+.app-main {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
