@@ -1,0 +1,59 @@
+.coaching-panel {
+  padding: 20px 22px 22px;
+  background: rgba(15, 28, 18, 0.5);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.coaching-panel h2 {
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+
+.coaching-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.coaching-tip {
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: rgba(244, 241, 228, 0.04);
+  border-left: 3px solid var(--chalk-dim);
+}
+
+.coaching-tip-good {
+  border-left-color: var(--fairway-green);
+}
+
+.coaching-tip-watch {
+  border-left-color: var(--flag-orange-bright);
+}
+
+.coaching-tip-info {
+  border-left-color: var(--sand);
+}
+
+.coaching-tip-title {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--chalk);
+  margin-bottom: 4px;
+}
+
+.coaching-tip-detail {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--chalk-dim);
+}
+
+.coaching-disclaimer {
+  margin-top: 14px;
+  font-size: 11px;
+  color: var(--chalk-dim);
+  opacity: 0.7;
+}

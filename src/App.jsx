@@ -5,6 +5,7 @@ import { PlaybackControls } from './components/PlaybackControls'
 import { AnnotationControls } from './components/AnnotationControls'
 import { LiveReadout } from './components/LiveReadout'
 import { ResultsPanel } from './components/ResultsPanel'
+import { CoachingPanel } from './components/CoachingPanel'
 import { usePoseModel } from './hooks/usePoseModel'
 import { useLivePose } from './hooks/useLivePose'
 import { useAnnotations } from './hooks/useAnnotations'
@@ -197,6 +198,8 @@ function App() {
               onSelectTime={handleSelectTime}
               canAnalyze={!!detector && duration > 0}
             />
+
+            <CoachingPanel checkpoints={analysis.checkpoints} />
           </>
         )}
       </main>
