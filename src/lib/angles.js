@@ -104,6 +104,26 @@ export function averageHipY(keypoints) {
   return (left_hip.y + right_hip.y) / 2
 }
 
+// Pixel distance between the two ankles — used to track how far the kicking
+// foot swings from the plant foot (large = backswing, small = feet together
+// at contact). Only meaningful for relative comparisons within one video,
+// never displayed directly since it isn't scale-normalized.
+export function ankleDistance(keypoints) {
+  const kp = keypointsByName(keypoints)
+  const { left_ankle, right_ankle } = kp
+  if (!confident(left_ankle, right_ankle)) return null
+  return Math.hypot(left_ankle.x - right_ankle.x, left_ankle.y - right_ankle.y)
+}
+
+// Angle of the line joining both hips, measured from horizontal — a proxy
+// for how open/rotated the hips are at a given moment.
+export function hipLineAngle(keypoints) {
+  const kp = keypointsByName(keypoints)
+  const { left_hip, right_hip } = kp
+  if (!confident(left_hip, right_hip)) return null
+  return lineAngleDegrees(left_hip, right_hip)
+}
+
 // Elbow bend of whichever arm (shoulder-elbow-wrist) has the more confident
 // keypoints — a stand-in for "which arm is shooting" since we don't track
 // handedness. 180 = fully extended arm.

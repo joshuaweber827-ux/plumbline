@@ -55,6 +55,20 @@
   --ink: #17222e;
 }
 
+/* Soccer tab: same structure again, night-match-under-floodlights palette —
+   deep indigo sky, electric-cyan accent, pitch-mint secondary. */
+:root[data-sport='soccer'] {
+  --turf-dark: #171a2e;
+  --turf-light: #262c4a;
+  --turf-darkest: #0d0f1c;
+  --chalk: #f2f3ea;
+  --chalk-dim: #d3d6c8;
+  --flag-orange: #1fb6c9;
+  --flag-orange-bright: #4dd0e0;
+  --sand: #8fd694;
+  --ink: #14182a;
+}
+
 * {
   box-sizing: border-box;
 }

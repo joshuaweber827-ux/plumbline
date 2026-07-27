@@ -13,9 +13,10 @@ import { useAnnotations } from './hooks/useAnnotations'
 import { golfSport } from './sports/golf'
 import { basketballSport } from './sports/basketball'
 import { baseballSport } from './sports/baseball'
+import { soccerSport } from './sports/soccer'
 import './App.css'
 
-const SPORTS = [golfSport, basketballSport, baseballSport]
+const SPORTS = [golfSport, basketballSport, baseballSport, soccerSport]
 
 function App() {
   const videoRef = useRef(null)
