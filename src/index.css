@@ -69,6 +69,20 @@
   --ink: #14182a;
 }
 
+/* Football tab: same structure again, gridiron-under-lights palette —
+   charcoal field, goalpost-gold accent, slate-gray secondary. */
+:root[data-sport='football'] {
+  --turf-dark: #1c1c1e;
+  --turf-light: #2e2c28;
+  --turf-darkest: #121212;
+  --chalk: #f2efe6;
+  --chalk-dim: #d4cfc0;
+  --flag-orange: #d4a017;
+  --flag-orange-bright: #e8b93a;
+  --sand: #7a8290;
+  --ink: #1a1a1a;
+}
+
 * {
   box-sizing: border-box;
 }

@@ -14,9 +14,10 @@ import { golfSport } from './sports/golf'
 import { basketballSport } from './sports/basketball'
 import { baseballSport } from './sports/baseball'
 import { soccerSport } from './sports/soccer'
+import { footballSport } from './sports/football'
 import './App.css'
 
-const SPORTS = [golfSport, basketballSport, baseballSport, soccerSport]
+const SPORTS = [golfSport, basketballSport, baseballSport, soccerSport, footballSport]
 
 function App() {
   const videoRef = useRef(null)
