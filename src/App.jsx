@@ -12,9 +12,10 @@ import { useLivePose } from './hooks/useLivePose'
 import { useAnnotations } from './hooks/useAnnotations'
 import { golfSport } from './sports/golf'
 import { basketballSport } from './sports/basketball'
+import { baseballSport } from './sports/baseball'
 import './App.css'
 
-const SPORTS = [golfSport, basketballSport]
+const SPORTS = [golfSport, basketballSport, baseballSport]
 
 function App() {
   const videoRef = useRef(null)

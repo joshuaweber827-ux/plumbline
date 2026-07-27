@@ -41,6 +41,20 @@
   --ink: #1c130d;
 }
 
+/* Baseball tab: same structure again, ballpark-at-dusk palette — navy sky,
+   red stitching accent, grass-green secondary. */
+:root[data-sport='baseball'] {
+  --turf-dark: #142335;
+  --turf-light: #203a56;
+  --turf-darkest: #0b1420;
+  --chalk: #f4efe0;
+  --chalk-dim: #d6cdb8;
+  --flag-orange: #c23b3b;
+  --flag-orange-bright: #dc5656;
+  --sand: #8aa06f;
+  --ink: #17222e;
+}
+
 * {
   box-sizing: border-box;
 }

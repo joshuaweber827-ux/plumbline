@@ -50,17 +50,31 @@ export function spineTiltAngle(keypoints) {
   return radians * (180 / Math.PI)
 }
 
+// Angle of the line a->b, measured from horizontal.
+function lineAngleDegrees(a, b) {
+  return Math.atan2(b.y - a.y, b.x - a.x) * (180 / Math.PI)
+}
+
 // Angle of the line joining both wrists, measured from horizontal.
 // Used as a proxy for swing-plane steepness at the top of the backswing.
 export function wristLineAngle(keypoints) {
   const kp = keypointsByName(keypoints)
   const { left_wrist, right_wrist } = kp
   if (!confident(left_wrist, right_wrist)) return null
+  return lineAngleDegrees(left_wrist, right_wrist)
+}
 
-  const dx = right_wrist.x - left_wrist.x
-  const dy = right_wrist.y - left_wrist.y
-  const radians = Math.atan2(dy, dx)
-  return radians * (180 / Math.PI)
+// Rotational difference between the shoulder line and the hip line — a 2D
+// proxy for hip-shoulder separation ("X-factor"): how coiled the torso is
+// relative to the hips at a given moment.
+export function hipShoulderSeparation(keypoints) {
+  const kp = keypointsByName(keypoints)
+  const { left_shoulder, right_shoulder, left_hip, right_hip } = kp
+  if (!confident(left_shoulder, right_shoulder, left_hip, right_hip)) return null
+  let diff = lineAngleDegrees(left_shoulder, right_shoulder) - lineAngleDegrees(left_hip, right_hip)
+  if (diff > 180) diff -= 360
+  if (diff < -180) diff += 360
+  return diff
 }
 
 // Average vertical (y) position of both wrists in pixel space, used to find
@@ -70,6 +84,15 @@ export function averageWristY(keypoints) {
   const { left_wrist, right_wrist } = kp
   if (!confident(left_wrist, right_wrist)) return null
   return (left_wrist.y + right_wrist.y) / 2
+}
+
+// Average (x, y) position of both wrists in pixel space, used to measure
+// hand speed frame-to-frame.
+export function averageWristPosition(keypoints) {
+  const kp = keypointsByName(keypoints)
+  const { left_wrist, right_wrist } = kp
+  if (!confident(left_wrist, right_wrist)) return null
+  return { x: (left_wrist.x + right_wrist.x) / 2, y: (left_wrist.y + right_wrist.y) / 2 }
 }
 
 // Average vertical (y) position of both hips, used to find the lowest point
