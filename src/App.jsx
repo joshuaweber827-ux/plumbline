@@ -183,7 +183,7 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1 className="app-title">I love cyrus</h1>
+        <h1 className="app-title">CoachCam</h1>
         <p className="app-subtitle">{sport.tagline}</p>
         <SportTabs sports={SPORTS} activeId={sport.id} onSelect={handleSelectSport} />
       </header>
