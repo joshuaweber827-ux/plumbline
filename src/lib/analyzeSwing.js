@@ -1,26 +1,7 @@
 import { averageWristY, spineTiltAngle, wristLineAngle } from './angles'
+import { seekTo, indexOfMin } from './videoSampling'
 
 const SAMPLE_COUNT = 48
-
-function seekTo(video, time) {
-  return new Promise((resolve) => {
-    // Some browsers don't fire 'seeked' when the target time is already the
-    // current position (e.g. sample 0 on a freshly loaded video), so this
-    // also resolves on a short timeout to avoid hanging the whole analysis.
-    let settled = false
-    const finish = () => {
-      if (settled) return
-      settled = true
-      video.removeEventListener('seeked', onSeeked)
-      clearTimeout(timer)
-      resolve()
-    }
-    const onSeeked = () => finish()
-    const timer = setTimeout(finish, 800)
-    video.addEventListener('seeked', onSeeked)
-    video.currentTime = time
-  })
-}
 
 // Steps through the whole clip, running pose detection on evenly spaced
 // samples, then derives the six checkpoints from the real keypoint data:
@@ -85,17 +66,4 @@ export async function analyzeSwing(video, detector, { onProgress } = {}) {
   }
 
   return { samples, checkpoints }
-}
-
-function indexOfMin(list, selector) {
-  let bestIndex = null
-  let bestValue = Infinity
-  list.forEach((item, i) => {
-    const value = selector(item)
-    if (value != null && value < bestValue) {
-      bestValue = value
-      bestIndex = i
-    }
-  })
-  return bestIndex
 }

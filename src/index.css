@@ -1,6 +1,7 @@
 :root {
   --turf-dark: #16281b;
   --turf-light: #1e3524;
+  --turf-darkest: #101f15;
   --chalk: #f4f1e4;
   --chalk-dim: #d8d4c2;
   --flag-orange: #c4502e;
@@ -25,6 +26,21 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Basketball tab: same structure (dark gradient bg, cream cards, one bold
+   accent, one muted secondary accent), different palette — hardwood court
+   instead of turf. Applied via a data-sport attribute on <html>. */
+:root[data-sport='basketball'] {
+  --turf-dark: #1a1310;
+  --turf-light: #2c1f16;
+  --turf-darkest: #120d0a;
+  --chalk: #f3ead8;
+  --chalk-dim: #d9cdb8;
+  --flag-orange: #e2691c;
+  --flag-orange-bright: #f5843a;
+  --sand: #c9a876;
+  --ink: #1c130d;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -33,7 +49,7 @@ body {
   margin: 0;
   min-height: 100svh;
   background: radial-gradient(circle at 15% -10%, var(--turf-light), transparent 55%),
-    linear-gradient(160deg, var(--turf-dark) 0%, #142418 55%, #101f15 100%);
+    linear-gradient(160deg, var(--turf-dark) 0%, var(--turf-light) 55%, var(--turf-darkest) 100%);
   background-attachment: fixed;
 }
 

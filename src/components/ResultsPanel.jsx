@@ -1,27 +1,28 @@
 import { formatDegrees } from '../lib/angles'
 import './ResultsPanel.css'
 
-const CHECKPOINTS = [
-  { key: 'setup', label: 'Setup Posture', metric: 'spineTilt', metricLabel: 'Spine tilt' },
-  { key: 'backswing', label: 'Backswing Plane', metric: 'swingPlane', metricLabel: 'Swing plane' },
-  { key: 'top', label: 'Top of Swing', metric: 'spineTilt', metricLabel: 'Spine tilt' },
-  { key: 'transition', label: 'Transition', metric: 'spineTilt', metricLabel: 'Spine tilt' },
-  { key: 'impact', label: 'Impact', metric: 'spineTilt', metricLabel: 'Spine tilt' },
-  { key: 'follow', label: 'Follow-Through', metric: 'spineTilt', metricLabel: 'Spine tilt' },
-]
-
-export function ResultsPanel({ status, progress, checkpoints, onAnalyze, onSelectTime, canAnalyze }) {
+export function ResultsPanel({
+  status,
+  progress,
+  checkpoints,
+  onAnalyze,
+  onSelectTime,
+  canAnalyze,
+  checkpointDefs,
+  title,
+  analyzeLabel,
+}) {
   return (
     <div className="results-panel">
       <div className="results-header">
-        <h2>Swing Checkpoints</h2>
+        <h2>{title}</h2>
         <button type="button" className="results-analyze-btn" onClick={onAnalyze} disabled={!canAnalyze || status === 'analyzing'}>
-          {status === 'analyzing' ? `Analyzing… ${Math.round(progress * 100)}%` : 'Analyze Swing'}
+          {status === 'analyzing' ? `Analyzing… ${Math.round(progress * 100)}%` : analyzeLabel}
         </button>
       </div>
 
       <div className="results-grid">
-        {CHECKPOINTS.map(({ key, label, metric, metricLabel }) => {
+        {checkpointDefs.map(({ key, label, metric, metricLabel }) => {
           const data = checkpoints?.[key]
           const value = data ? data[metric] : null
           return (

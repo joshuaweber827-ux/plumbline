@@ -1,13 +1,12 @@
-import { generateCoachingTips } from '../lib/coaching'
 import './CoachingPanel.css'
 
-export function CoachingPanel({ checkpoints }) {
+export function CoachingPanel({ checkpoints, tipGenerator, title }) {
   if (!checkpoints) return null
-  const tips = generateCoachingTips(checkpoints)
+  const tips = tipGenerator(checkpoints)
 
   return (
     <div className="coaching-panel">
-      <h2>Swing Feedback</h2>
+      <h2>{title}</h2>
       <div className="coaching-list">
         {tips.map((tip) => (
           <div key={tip.id} className={`coaching-tip coaching-tip-${tip.severity}`}>

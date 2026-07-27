@@ -38,6 +38,10 @@
   margin-left: 18px;
 }
 
+.app-header .sport-tabs {
+  margin: 10px 0 0 18px;
+}
+
 .app-main {
   display: flex;
   flex-direction: column;

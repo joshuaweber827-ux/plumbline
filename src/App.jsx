@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { VideoUploader } from './components/VideoUploader'
 import { VideoStage } from './components/VideoStage'
 import { PlaybackControls } from './components/PlaybackControls'
@@ -6,12 +6,15 @@ import { AnnotationControls } from './components/AnnotationControls'
 import { LiveReadout } from './components/LiveReadout'
 import { ResultsPanel } from './components/ResultsPanel'
 import { CoachingPanel } from './components/CoachingPanel'
+import { SportTabs } from './components/SportTabs'
 import { usePoseModel } from './hooks/usePoseModel'
 import { useLivePose } from './hooks/useLivePose'
 import { useAnnotations } from './hooks/useAnnotations'
-import { analyzeSwing } from './lib/analyzeSwing'
-import { spineTiltAngle, wristLineAngle } from './lib/angles'
+import { golfSport } from './sports/golf'
+import { basketballSport } from './sports/basketball'
 import './App.css'
+
+const SPORTS = [golfSport, basketballSport]
 
 function App() {
   const videoRef = useRef(null)
@@ -46,6 +49,7 @@ function App() {
     [bumpMountTick],
   )
 
+  const [sport, setSport] = useState(golfSport)
   const [videoUrl, setVideoUrl] = useState(null)
   const [duration, setDuration] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
@@ -55,6 +59,16 @@ function App() {
   const [analysis, setAnalysis] = useState({ status: 'idle', progress: 0, checkpoints: null })
 
   const { detector, status: modelStatus } = usePoseModel()
+
+  useEffect(() => {
+    document.documentElement.dataset.sport = sport.id
+  }, [sport])
+
+  const { lines, undo, clear, canUndo } = useAnnotations({
+    canvasRef: annotationCanvasRef,
+    videoRef,
+    mountTick,
+  })
 
   const handleFileSelected = useCallback(
     (file) => {
@@ -66,8 +80,26 @@ function App() {
       setAspectRatio(null)
       setCurrentKeypoints(null)
       setAnalysis({ status: 'idle', progress: 0, checkpoints: null })
+      clear()
     },
-    [videoUrl],
+    [videoUrl, clear],
+  )
+
+  const handleSelectSport = useCallback(
+    (nextSport) => {
+      if (nextSport.id === sport.id) return
+      if (videoUrl) URL.revokeObjectURL(videoUrl)
+      setSport(nextSport)
+      setVideoUrl(null)
+      setDuration(0)
+      setCurrentTime(0)
+      setIsPlaying(false)
+      setAspectRatio(null)
+      setCurrentKeypoints(null)
+      setAnalysis({ status: 'idle', progress: 0, checkpoints: null })
+      clear()
+    },
+    [sport, videoUrl, clear],
   )
 
   const handleLoadedMetadata = useCallback(() => {
@@ -107,14 +139,14 @@ function App() {
     const wasTime = video.currentTime
     setAnalysis({ status: 'analyzing', progress: 0, checkpoints: null })
     try {
-      const { checkpoints } = await analyzeSwing(video, detector, {
+      const { checkpoints } = await sport.analyze(video, detector, {
         onProgress: (progress) => setAnalysis((prev) => ({ ...prev, progress })),
       })
       setAnalysis({ status: 'done', progress: 1, checkpoints })
     } finally {
       video.currentTime = wasTime
     }
-  }, [detector])
+  }, [detector, sport])
 
   const handleSelectTime = useCallback((time) => {
     const video = videoRef.current
@@ -137,29 +169,25 @@ function App() {
     mountTick,
   })
 
-  const { lines, undo, clear, canUndo } = useAnnotations({
-    canvasRef: annotationCanvasRef,
-    videoRef,
-    mountTick,
-  })
-
-  const liveAngles = useMemo(() => {
-    if (!currentKeypoints) return { spineTilt: null, swingPlane: null }
-    return {
-      spineTilt: spineTiltAngle(currentKeypoints),
-      swingPlane: wristLineAngle(currentKeypoints),
-    }
-  }, [currentKeypoints])
+  const liveMetrics = useMemo(
+    () =>
+      sport.liveMetrics.map((metric) => ({
+        label: metric.label,
+        value: currentKeypoints ? metric.compute(currentKeypoints) : null,
+      })),
+    [currentKeypoints, sport],
+  )
 
   return (
     <div className="app">
       <header className="app-header">
         <h1 className="app-title">I love cyrus</h1>
-        <p className="app-subtitle">Real pose-detection swing analysis, right in your browser</p>
+        <p className="app-subtitle">{sport.tagline}</p>
+        <SportTabs sports={SPORTS} activeId={sport.id} onSelect={handleSelectSport} />
       </header>
 
       <main className="app-main">
-        <VideoUploader onFileSelected={handleFileSelected} hasVideo={!!videoUrl} />
+        <VideoUploader onFileSelected={handleFileSelected} hasVideo={!!videoUrl} activityLabel={sport.activityLabel} icon={sport.icon} />
 
         {videoUrl && (
           <>
@@ -177,7 +205,7 @@ function App() {
               aspectRatio={aspectRatio}
             />
 
-            <LiveReadout spineTilt={liveAngles.spineTilt} swingPlane={liveAngles.swingPlane} detected={!!currentKeypoints} />
+            <LiveReadout metrics={liveMetrics} detected={!!currentKeypoints} />
 
             <PlaybackControls
               videoRef={videoRef}
@@ -197,9 +225,12 @@ function App() {
               onAnalyze={handleAnalyze}
               onSelectTime={handleSelectTime}
               canAnalyze={!!detector && duration > 0}
+              checkpointDefs={sport.checkpointDefs}
+              title={sport.checkpointsTitle}
+              analyzeLabel={sport.analyzeLabel}
             />
 
-            <CoachingPanel checkpoints={analysis.checkpoints} />
+            <CoachingPanel checkpoints={analysis.checkpoints} tipGenerator={sport.coach} title={sport.feedbackTitle} />
           </>
         )}
       </main>
