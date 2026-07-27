@@ -24,6 +24,8 @@ export function generateCoachingTips(checkpoints) {
           severity: 'watch',
           title: 'Try slowing down at the top',
           detail: 'Your downswing happens much faster than your backswing. Pause briefly at the top before starting down — it usually helps timing.',
+          betterForm:
+            "Good tempo often feels like counting \"1-2-3\" going back and \"1\" coming down — a clear pause at the top before the club starts moving again.",
         })
       } else if (ratio > TEMPO_TARGET + TEMPO_TOLERANCE) {
         tips.push({
@@ -31,6 +33,8 @@ export function generateCoachingTips(checkpoints) {
           severity: 'watch',
           title: 'Be more decisive coming down',
           detail: "You take your time going back, then ease into the ball. Try committing to the downswing a bit more — it's often where speed gets lost.",
+          betterForm:
+            'Try feeling a smooth build in speed through the downswing, so your fastest moment is right at the ball — not before it.',
         })
       } else {
         tips.push({
@@ -51,6 +55,8 @@ export function generateCoachingTips(checkpoints) {
         severity: 'watch',
         title: 'Try holding your posture longer',
         detail: "Your body position at impact looks noticeably different from your setup. Try keeping the same forward bend you started with all the way through the ball — it usually leads to more solid contact.",
+        betterForm:
+          'Picture a line running from the top of your head through your tailbone at address — solid ball-strikers keep roughly that same tilt all the way to impact instead of standing up or dropping down.',
       })
     } else {
       tips.push({
@@ -70,6 +76,7 @@ export function generateCoachingTips(checkpoints) {
         severity: 'watch',
         title: 'Watch for swaying off the ball',
         detail: "Your upper body shifts a good amount going back. Try to turn in place rather than sliding side to side — it'll help you stay centered over the ball.",
+        betterForm: 'A good backswing turn keeps your head roughly over the same spot — like turning inside a barrel instead of sliding to one side.',
       })
     }
   }
@@ -82,6 +89,8 @@ export function generateCoachingTips(checkpoints) {
         severity: 'watch',
         title: 'Backswing path could be more consistent',
         detail: 'Your hands and arms change direction noticeably right near the top of your backswing. A smoother, more consistent path back tends to make the downswing easier to repeat.',
+        betterForm:
+          'A repeatable backswing keeps the club moving on one steady path from takeaway to the top, without a late steepening or flattening move.',
       })
     }
   }

@@ -20,6 +20,8 @@ export function generateShotCoachingTips(checkpoints) {
         severity: 'watch',
         title: 'Straighten your arm more at release',
         detail: "Your shooting arm isn't fully extended when the ball leaves your hand. Finishing straighter usually adds consistency and range.",
+        betterForm:
+          'At the moment the ball leaves your hand, your shooting arm should look almost fully straight, wrist relaxed and pointing down toward the basket ("reach into the cookie jar").',
       })
     } else {
       tips.push({
@@ -38,6 +40,7 @@ export function generateShotCoachingTips(checkpoints) {
         severity: 'watch',
         title: 'Use your legs more',
         detail: 'Your knees stay fairly straight before you shoot. Bending them more lets your legs help power the shot instead of just your arm.',
+        betterForm: 'A good load looks like a quarter-to-half squat — bent enough that you could jump straight up from that position.',
       })
     } else {
       tips.push({
@@ -55,6 +58,8 @@ export function generateShotCoachingTips(checkpoints) {
       severity: 'watch',
       title: 'Check your elbow bend before you shoot',
       detail: 'Many shooters aim for roughly a right angle at the elbow before pushing the ball up. Yours looks noticeably more or less bent than that.',
+      betterForm:
+        "At the set point, many shooters cock the elbow to roughly 90°, like holding a waiter's tray at shoulder height, before extending straight up and out.",
     })
   }
 
@@ -66,6 +71,8 @@ export function generateShotCoachingTips(checkpoints) {
         severity: 'watch',
         title: 'Work on landing balanced',
         detail: 'You finish in a noticeably different body position than you started in. Try to land in about the same spot you jumped from.',
+        betterForm:
+          'Good shooters often land in close to the same footprint they jumped from — try freezing your follow-through and checking if you’re still balanced over your feet.',
       })
     } else {
       tips.push({

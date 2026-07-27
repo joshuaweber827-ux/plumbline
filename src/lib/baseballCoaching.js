@@ -18,6 +18,8 @@ export function generateAtBatCoachingTips(checkpoints) {
         severity: 'watch',
         title: 'Try creating more coil on your load',
         detail: "Your shoulders and hips don't turn away from each other much as you load. Letting your shoulders turn back while your hips stay a bit quieter can build more power into your swing.",
+        betterForm:
+          'A strong load looks like your belt buckle facing the pitcher a beat longer while your shoulders keep turning back — like winding up a rubber band before it snaps forward.',
       })
     } else {
       tips.push({
@@ -36,6 +38,7 @@ export function generateAtBatCoachingTips(checkpoints) {
         severity: 'watch',
         title: 'Soften your front leg at foot strike',
         detail: 'Your front leg looks quite straight as your stride foot lands. A bit more flex there helps you stay balanced and use your lower half.',
+        betterForm: 'A good stride lands with a slightly bent front knee that can absorb your weight, not a stiff, locked-out leg.',
       })
     } else {
       tips.push({
@@ -54,6 +57,7 @@ export function generateAtBatCoachingTips(checkpoints) {
         severity: 'watch',
         title: 'Extend through the ball more',
         detail: 'Your arms look a little collapsed around contact. Reaching out through the ball more can add power and consistency.',
+        betterForm: 'Good contact often looks like your back arm nearly straightening as it drives through the ball, rather than staying tucked and bent.',
       })
     } else {
       tips.push({
@@ -73,6 +77,8 @@ export function generateAtBatCoachingTips(checkpoints) {
         severity: 'watch',
         title: 'Work on staying balanced',
         detail: 'You finish in a noticeably different body position than you started in. Try to keep your head and body under control instead of drifting or falling off balance.',
+        betterForm:
+          'Try finishing your swing balanced, with your back foot pivoted and your head still — not falling forward or spinning off balance.',
       })
     } else {
       tips.push({

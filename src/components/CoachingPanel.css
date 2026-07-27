@@ -16,6 +16,31 @@
   gap: 10px;
 }
 
+.coaching-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.coaching-columns + .coaching-disclaimer,
+.coaching-list + .coaching-columns {
+  margin-top: 14px;
+}
+
+.coaching-column-title {
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+}
+
+.coaching-column-title-good {
+  color: var(--fairway-green);
+}
+
+.coaching-column-title-watch {
+  color: var(--flag-orange-bright);
+}
+
 .coaching-tip {
   padding: 12px 14px;
   border-radius: 8px;
@@ -49,6 +74,25 @@
   font-size: 13px;
   line-height: 1.5;
   color: var(--chalk-dim);
+}
+
+.coaching-tip-example {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--chalk);
+}
+
+.coaching-tip-example-label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--sand);
+  margin-bottom: 4px;
 }
 
 .coaching-disclaimer {
