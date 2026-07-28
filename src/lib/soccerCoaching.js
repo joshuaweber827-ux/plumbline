@@ -1,21 +1,29 @@
+import { closenessScore, towardTargetScore } from './scoreCurve'
+
 const KNEE_BEND_THRESHOLD = 165
+const KNEE_BEND_TOLERANCE = 25
 const HIP_ROTATION_TARGET = 15
 const CONTACT_LEAN_THRESHOLD = 12
 const BALANCE_THRESHOLD = 10
 
 // Every check compares the kicker's own checkpoints against each other
 // rather than absolute "ideal" angles — a single uncalibrated camera can't
-// reliably support the latter for a fast, rotational motion like this.
+// reliably support the latter for a fast, rotational motion like this. Each
+// tip also carries a scoreContribution (0-100, how close that dimension is
+// to ideal) that the overall form score averages across every check.
 export function generateKickCoachingTips(checkpoints) {
   if (!checkpoints) return []
   const { stance, plant, backswing, contact, finish } = checkpoints
   const tips = []
 
   if (plant?.kneeBend != null) {
+    const excess = Math.max(0, plant.kneeBend - KNEE_BEND_THRESHOLD)
+    const scoreContribution = closenessScore(excess, KNEE_BEND_TOLERANCE)
     if (plant.kneeBend > KNEE_BEND_THRESHOLD) {
       tips.push({
         id: 'plant-knee-watch',
         severity: 'watch',
+        scoreContribution,
         title: 'Bend your plant knee more',
         detail: 'Your standing leg looks quite straight as you plant next to the ball. A slight bend there helps with balance and control.',
         betterForm:
@@ -25,6 +33,7 @@ export function generateKickCoachingTips(checkpoints) {
       tips.push({
         id: 'plant-knee-good',
         severity: 'good',
+        scoreContribution,
         title: 'Good plant-leg bend',
         detail: 'Your standing leg has a nice bit of flex as you plant — that helps you stay balanced through the kick.',
       })
@@ -33,10 +42,12 @@ export function generateKickCoachingTips(checkpoints) {
 
   if (backswing?.hipRotation != null && contact?.hipRotation != null) {
     const delta = Math.abs(contact.hipRotation - backswing.hipRotation)
+    const scoreContribution = towardTargetScore(delta, HIP_ROTATION_TARGET, 0)
     if (delta < HIP_ROTATION_TARGET) {
       tips.push({
         id: 'hip-rotation-watch',
         severity: 'watch',
+        scoreContribution,
         title: 'Rotate your hips more through the ball',
         detail: "Your hips don't open up much between your backswing and contact. Driving your hips through the ball as your leg swings forward usually adds power.",
         betterForm:
@@ -46,6 +57,7 @@ export function generateKickCoachingTips(checkpoints) {
       tips.push({
         id: 'hip-rotation-good',
         severity: 'good',
+        scoreContribution,
         title: 'Good hip drive through contact',
         detail: 'Your hips rotate well from backswing into contact — that rotation is a big source of power in a kick.',
       })
@@ -54,10 +66,12 @@ export function generateKickCoachingTips(checkpoints) {
 
   if (stance?.spineTilt != null && contact?.spineTilt != null) {
     const delta = Math.abs(contact.spineTilt - stance.spineTilt)
+    const scoreContribution = closenessScore(delta, CONTACT_LEAN_THRESHOLD)
     if (delta > CONTACT_LEAN_THRESHOLD) {
       tips.push({
         id: 'contact-lean-watch',
         severity: 'watch',
+        scoreContribution,
         title: "Try not to lean back at contact",
         detail: 'Your body tilts noticeably by the time you strike the ball. Staying more upright through contact usually helps accuracy and power.',
         betterForm:
@@ -67,6 +81,7 @@ export function generateKickCoachingTips(checkpoints) {
       tips.push({
         id: 'contact-lean-good',
         severity: 'good',
+        scoreContribution,
         title: 'Good posture through contact',
         detail: 'Your body stays fairly steady from your stance into contact — that helps you strike the ball cleanly.',
       })
@@ -75,10 +90,12 @@ export function generateKickCoachingTips(checkpoints) {
 
   if (stance?.spineTilt != null && finish?.spineTilt != null) {
     const delta = Math.abs(finish.spineTilt - stance.spineTilt)
+    const scoreContribution = closenessScore(delta, BALANCE_THRESHOLD)
     if (delta > BALANCE_THRESHOLD) {
       tips.push({
         id: 'balance-watch',
         severity: 'watch',
+        scoreContribution,
         title: 'Work on finishing balanced',
         detail: 'You land in a noticeably different body position than you started in. Try to control your follow-through instead of falling off to one side.',
         betterForm:
@@ -88,6 +105,7 @@ export function generateKickCoachingTips(checkpoints) {
       tips.push({
         id: 'balance-good',
         severity: 'good',
+        scoreContribution,
         title: 'Balanced start to finish',
         detail: 'Your body position at the end is close to where you started — a sign of good balance and control through the kick.',
       })

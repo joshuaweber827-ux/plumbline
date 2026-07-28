@@ -1,14 +1,16 @@
-// Derives a 1-100 form score from the same coaching tips shown in the
-// feedback panel, rather than a separate scoring formula — the score is
-// just "what fraction of checks came back good," so it stays consistent
-// with (and explainable by) the strengths/focus-areas breakdown below it.
+// Derives a 1-100 form score by averaging each coaching tip's
+// scoreContribution — a continuous measure of how close that specific
+// dimension (posture, extension, tempo, etc.) is to ideal form, not a
+// pass/fail count. This keeps the number consistent with (and explainable
+// by) the strengths/focus-areas breakdown shown below it, since it's built
+// from the exact same per-check comparisons.
 export function scoreFromTips(tips) {
-  const scored = tips.filter((tip) => tip.severity === 'good' || tip.severity === 'watch')
+  const scored = tips.filter((tip) => typeof tip.scoreContribution === 'number')
   if (scored.length === 0) return null
 
   const goodCount = scored.filter((tip) => tip.severity === 'good').length
-  const watchCount = scored.length - goodCount
-  const score = Math.max(1, Math.min(100, Math.round((goodCount / scored.length) * 100)))
+  const sum = scored.reduce((total, tip) => total + tip.scoreContribution, 0)
+  const score = Math.max(1, Math.min(100, Math.round(sum / scored.length)))
 
-  return { score, goodCount, watchCount, total: scored.length }
+  return { score, goodCount, total: scored.length }
 }

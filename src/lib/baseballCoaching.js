@@ -1,21 +1,30 @@
+import { closenessScore, towardTargetScore } from './scoreCurve'
+
 const SEPARATION_TARGET = 15
 const KNEE_BEND_THRESHOLD = 165
+const KNEE_BEND_TOLERANCE = 25
 const EXTENSION_TARGET = 150
+const ELBOW_EXTENSION_FLOOR = 90
 const BALANCE_THRESHOLD = 10
 
 // Contact extension leans on a fixed target (a fairly straight arm through
 // the ball reads as such from most angles); separation, knee bend, and
-// balance all compare the hitter's own checkpoints against each other.
+// balance all compare the hitter's own checkpoints against each other. Each
+// tip also carries a scoreContribution (0-100, how close that dimension is
+// to ideal) that the overall form score averages across every check.
 export function generateAtBatCoachingTips(checkpoints) {
   if (!checkpoints) return []
   const { stance, load, stride, contact, finish } = checkpoints
   const tips = []
 
   if (load?.separation != null) {
-    if (Math.abs(load.separation) < SEPARATION_TARGET) {
+    const magnitude = Math.abs(load.separation)
+    const scoreContribution = towardTargetScore(magnitude, SEPARATION_TARGET, 0)
+    if (magnitude < SEPARATION_TARGET) {
       tips.push({
         id: 'separation-watch',
         severity: 'watch',
+        scoreContribution,
         title: 'Try creating more coil on your load',
         detail: "Your shoulders and hips don't turn away from each other much as you load. Letting your shoulders turn back while your hips stay a bit quieter can build more power into your swing.",
         betterForm:
@@ -25,6 +34,7 @@ export function generateAtBatCoachingTips(checkpoints) {
       tips.push({
         id: 'separation-good',
         severity: 'good',
+        scoreContribution,
         title: 'Good coil on your load',
         detail: 'Your shoulders turn well away from your hips as you load — that separation is a big source of bat speed.',
       })
@@ -32,10 +42,13 @@ export function generateAtBatCoachingTips(checkpoints) {
   }
 
   if (stride?.kneeBend != null) {
+    const excess = Math.max(0, stride.kneeBend - KNEE_BEND_THRESHOLD)
+    const scoreContribution = closenessScore(excess, KNEE_BEND_TOLERANCE)
     if (stride.kneeBend > KNEE_BEND_THRESHOLD) {
       tips.push({
         id: 'stride-knee-watch',
         severity: 'watch',
+        scoreContribution,
         title: 'Soften your front leg at foot strike',
         detail: 'Your front leg looks quite straight as your stride foot lands. A bit more flex there helps you stay balanced and use your lower half.',
         betterForm: 'A good stride lands with a slightly bent front knee that can absorb your weight, not a stiff, locked-out leg.',
@@ -44,6 +57,7 @@ export function generateAtBatCoachingTips(checkpoints) {
       tips.push({
         id: 'stride-knee-good',
         severity: 'good',
+        scoreContribution,
         title: 'Good front-leg flex',
         detail: 'Your front knee has a nice bend when your stride foot lands — that helps you stay balanced through the swing.',
       })
@@ -51,10 +65,12 @@ export function generateAtBatCoachingTips(checkpoints) {
   }
 
   if (contact?.elbow != null) {
+    const scoreContribution = towardTargetScore(contact.elbow, EXTENSION_TARGET, ELBOW_EXTENSION_FLOOR)
     if (contact.elbow < EXTENSION_TARGET) {
       tips.push({
         id: 'contact-extension-watch',
         severity: 'watch',
+        scoreContribution,
         title: 'Extend through the ball more',
         detail: 'Your arms look a little collapsed around contact. Reaching out through the ball more can add power and consistency.',
         betterForm: 'Good contact often looks like your back arm nearly straightening as it drives through the ball, rather than staying tucked and bent.',
@@ -63,6 +79,7 @@ export function generateAtBatCoachingTips(checkpoints) {
       tips.push({
         id: 'contact-extension-good',
         severity: 'good',
+        scoreContribution,
         title: 'Good extension at contact',
         detail: 'Your arms are nicely extended right around contact — that helps you drive through the ball.',
       })
@@ -71,10 +88,12 @@ export function generateAtBatCoachingTips(checkpoints) {
 
   if (stance?.spineTilt != null && finish?.spineTilt != null) {
     const delta = Math.abs(finish.spineTilt - stance.spineTilt)
+    const scoreContribution = closenessScore(delta, BALANCE_THRESHOLD)
     if (delta > BALANCE_THRESHOLD) {
       tips.push({
         id: 'balance-watch',
         severity: 'watch',
+        scoreContribution,
         title: 'Work on staying balanced',
         detail: 'You finish in a noticeably different body position than you started in. Try to keep your head and body under control instead of drifting or falling off balance.',
         betterForm:
@@ -84,6 +103,7 @@ export function generateAtBatCoachingTips(checkpoints) {
       tips.push({
         id: 'balance-good',
         severity: 'good',
+        scoreContribution,
         title: 'Balanced start to finish',
         detail: 'Your body position at the end is close to where you started — a sign of good balance through your swing.',
       })

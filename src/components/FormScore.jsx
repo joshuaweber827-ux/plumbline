@@ -2,7 +2,7 @@ import './FormScore.css'
 
 export function FormScore({ result, activityLabel }) {
   if (!result) return null
-  const { score, goodCount, total } = result
+  const { score, total } = result
   const tier = score >= 70 ? 'good' : 'watch'
 
   return (
@@ -14,7 +14,7 @@ export function FormScore({ result, activityLabel }) {
       <div className="form-score-body">
         <span className="form-score-label">Form Score</span>
         <span className="form-score-detail">
-          {goodCount} of {total} checks look solid on this {activityLabel}
+          How close this {activityLabel} measures to ideal form, averaged across {total} checks
         </span>
       </div>
     </div>

@@ -1,22 +1,33 @@
+import { closenessScore, towardTargetScore } from './scoreCurve'
+
 const LOAD_ELBOW_MAX = 130
+const LOAD_ELBOW_TOLERANCE = 30
 const RELEASE_EXTENSION_TARGET = 155
+const ELBOW_EXTENSION_FLOOR = 90
 const KNEE_BEND_THRESHOLD = 165
+const KNEE_BEND_TOLERANCE = 25
 const BALANCE_THRESHOLD = 10
 
 // Release extension leans on a fixed target (a fairly straight arm at the
 // moment of release reads as such from most camera angles), which is more
 // reliable with a single uncalibrated camera than a precise mid-range
-// target; the rest compare the thrower's own checkpoints against each other.
+// target; the rest compare the thrower's own checkpoints against each
+// other. Each tip also carries a scoreContribution (0-100, how close that
+// dimension is to ideal) that the overall form score averages across every
+// check.
 export function generateThrowCoachingTips(checkpoints) {
   if (!checkpoints) return []
   const { stance, load, stride, release, finish } = checkpoints
   const tips = []
 
   if (load?.elbow != null) {
+    const excess = Math.max(0, load.elbow - LOAD_ELBOW_MAX)
+    const scoreContribution = closenessScore(excess, LOAD_ELBOW_TOLERANCE)
     if (load.elbow > LOAD_ELBOW_MAX) {
       tips.push({
         id: 'load-elbow-watch',
         severity: 'watch',
+        scoreContribution,
         title: 'Get a tighter bend as you load',
         detail: "Your arm doesn't get very bent as you bring the ball back. A tighter cocked position often adds velocity and control.",
         betterForm:
@@ -26,6 +37,7 @@ export function generateThrowCoachingTips(checkpoints) {
       tips.push({
         id: 'load-elbow-good',
         severity: 'good',
+        scoreContribution,
         title: 'Good arm cock on your load',
         detail: 'You get a nice, tight bend in your elbow as you bring the ball back — a strong base for the throw.',
       })
@@ -33,10 +45,12 @@ export function generateThrowCoachingTips(checkpoints) {
   }
 
   if (release?.elbow != null) {
+    const scoreContribution = towardTargetScore(release.elbow, RELEASE_EXTENSION_TARGET, ELBOW_EXTENSION_FLOOR)
     if (release.elbow < RELEASE_EXTENSION_TARGET) {
       tips.push({
         id: 'release-extension-watch',
         severity: 'watch',
+        scoreContribution,
         title: 'Extend your arm more at release',
         detail: "Your throwing arm isn't fully extended when the ball leaves your hand. Finishing straighter toward your target usually adds velocity and accuracy.",
         betterForm:
@@ -46,6 +60,7 @@ export function generateThrowCoachingTips(checkpoints) {
       tips.push({
         id: 'release-extension-good',
         severity: 'good',
+        scoreContribution,
         title: 'Good extension at release',
         detail: 'Your arm reaches a strong, full extension right as the ball leaves your hand.',
       })
@@ -53,10 +68,13 @@ export function generateThrowCoachingTips(checkpoints) {
   }
 
   if (stride?.kneeBend != null) {
+    const excess = Math.max(0, stride.kneeBend - KNEE_BEND_THRESHOLD)
+    const scoreContribution = closenessScore(excess, KNEE_BEND_TOLERANCE)
     if (stride.kneeBend > KNEE_BEND_THRESHOLD) {
       tips.push({
         id: 'stride-knee-watch',
         severity: 'watch',
+        scoreContribution,
         title: 'Soften your front leg on your stride',
         detail: 'Your front leg looks quite straight as your stride foot lands. A bit more flex there helps you transfer weight into the throw instead of losing power.',
         betterForm: 'A good stride lands with a slightly bent front knee that can absorb your weight and drive power up into the throw.',
@@ -65,6 +83,7 @@ export function generateThrowCoachingTips(checkpoints) {
       tips.push({
         id: 'stride-knee-good',
         severity: 'good',
+        scoreContribution,
         title: 'Good front-leg drive',
         detail: 'Your front knee has a nice bend when your stride foot lands — that helps you transfer power from your legs into the throw.',
       })
@@ -73,10 +92,12 @@ export function generateThrowCoachingTips(checkpoints) {
 
   if (stance?.spineTilt != null && finish?.spineTilt != null) {
     const delta = Math.abs(finish.spineTilt - stance.spineTilt)
+    const scoreContribution = closenessScore(delta, BALANCE_THRESHOLD)
     if (delta > BALANCE_THRESHOLD) {
       tips.push({
         id: 'balance-watch',
         severity: 'watch',
+        scoreContribution,
         title: 'Work on staying balanced',
         detail: 'You finish in a noticeably different body position than you started in. Try to keep your weight under control rather than falling off to one side.',
         betterForm:
@@ -86,6 +107,7 @@ export function generateThrowCoachingTips(checkpoints) {
       tips.push({
         id: 'balance-good',
         severity: 'good',
+        scoreContribution,
         title: 'Balanced start to finish',
         detail: 'Your body position at the end is close to where you started — a sign of good balance through your throw.',
       })
