@@ -1,10 +1,10 @@
 .app {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 22px 20px 40px;
+  padding: 16px 20px 24px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .app-header {
@@ -14,7 +14,7 @@
   justify-content: space-between;
   column-gap: 20px;
   row-gap: 10px;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .app-header-text {
@@ -54,7 +54,7 @@
 .app-main {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
 .app-columns {

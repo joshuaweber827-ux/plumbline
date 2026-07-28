@@ -40,8 +40,8 @@ export function HomePage({ sports, onSelectSport }) {
       <section className="home-intro">
         <h2 className="home-intro-title">Pick a sport to get started</h2>
         <p className="home-intro-detail">
-          CoachCam runs real pose detection on your uploaded video — nothing leaves your browser — and turns it into
-          frame-by-frame checkpoints and coaching feedback.
+          Real pose detection on your uploaded video, run entirely in your browser — checkpoints, angles, and
+          coaching tips in return.
         </p>
       </section>
 
