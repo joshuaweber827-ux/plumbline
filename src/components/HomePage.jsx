@@ -40,6 +40,16 @@ export function HomePage({ sports, onSelectSport }) {
           </button>
         ))}
       </section>
+
+      <section className="home-about">
+        <h2 className="home-about-title">Who Made This</h2>
+        <p className="home-about-detail">
+          CoachCam was built by Josh and Jake — we're heading into junior year of high school together. We picked up
+          golf recently and thought real pose-detection feedback on our swings would be genuinely useful, then
+          figured the same idea could help with just about any sport — which is how Basketball, Baseball, Soccer,
+          and Football ended up here too.
+        </p>
+      </section>
     </div>
   )
 }
