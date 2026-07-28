@@ -99,23 +99,73 @@
   color: var(--chalk-dim);
 }
 
-.home-about {
+.home-footer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  align-items: start;
+}
+
+.home-about,
+.home-sources {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-width: 640px;
   padding: 16px 18px;
   background: rgba(15, 28, 18, 0.5);
   border: 1px solid var(--line);
   border-radius: 10px;
 }
 
-.home-about-title {
+.home-about-title,
+.home-sources-title {
   font-size: 16px;
 }
 
 .home-about-detail {
   font-size: 13px;
   line-height: 1.6;
+  color: var(--chalk-dim);
+}
+
+.home-sources-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: source;
+}
+
+.home-source {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 22px;
+  position: relative;
+  counter-increment: source;
+}
+
+.home-source::before {
+  content: counter(source);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--flag-orange-bright);
+}
+
+.home-source-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  color: var(--chalk);
+}
+
+.home-source-detail {
+  font-size: 12.5px;
+  line-height: 1.5;
   color: var(--chalk-dim);
 }
