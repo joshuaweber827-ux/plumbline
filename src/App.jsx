@@ -184,8 +184,10 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1 className="app-title">CoachCam</h1>
-        <p className="app-subtitle">{sport.tagline}</p>
+        <div className="app-header-text">
+          <h1 className="app-title">CoachCam</h1>
+          <p className="app-subtitle">{sport.tagline}</p>
+        </div>
         <SportTabs sports={SPORTS} activeId={sport.id} onSelect={handleSelectSport} />
       </header>
 
@@ -193,48 +195,52 @@ function App() {
         <VideoUploader onFileSelected={handleFileSelected} hasVideo={!!videoUrl} activityLabel={sport.activityLabel} icon={sport.icon} />
 
         {videoUrl && (
-          <>
-            <VideoStage
-              ref={attachVideoRef}
-              videoUrl={videoUrl}
-              onLoadedMetadata={handleLoadedMetadata}
-              onTimeUpdate={handleTimeUpdate}
-              onPlay={() => setIsPlaying(true)}
-              onPause={() => setIsPlaying(false)}
-              poseCanvasRef={attachPoseCanvasRef}
-              annotationCanvasRef={attachAnnotationCanvasRef}
-              modelStatus={modelStatus}
-              isPaused={!isPlaying}
-              aspectRatio={aspectRatio}
-            />
+          <div className="app-columns">
+            <div className="app-player">
+              <VideoStage
+                ref={attachVideoRef}
+                videoUrl={videoUrl}
+                onLoadedMetadata={handleLoadedMetadata}
+                onTimeUpdate={handleTimeUpdate}
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
+                poseCanvasRef={attachPoseCanvasRef}
+                annotationCanvasRef={attachAnnotationCanvasRef}
+                modelStatus={modelStatus}
+                isPaused={!isPlaying}
+                aspectRatio={aspectRatio}
+              />
 
-            <LiveReadout metrics={liveMetrics} detected={!!currentKeypoints} />
+              <LiveReadout metrics={liveMetrics} detected={!!currentKeypoints} />
 
-            <PlaybackControls
-              videoRef={videoRef}
-              duration={duration}
-              currentTime={currentTime}
-              isPlaying={isPlaying}
-              onTogglePlay={togglePlay}
-              onSeek={handleSeek}
-            />
+              <PlaybackControls
+                videoRef={videoRef}
+                duration={duration}
+                currentTime={currentTime}
+                isPlaying={isPlaying}
+                onTogglePlay={togglePlay}
+                onSeek={handleSeek}
+              />
 
-            <AnnotationControls isPaused={!isPlaying} lineCount={lines.length} onUndo={undo} onClear={clear} canUndo={canUndo} />
+              <AnnotationControls isPaused={!isPlaying} lineCount={lines.length} onUndo={undo} onClear={clear} canUndo={canUndo} />
+            </div>
 
-            <ResultsPanel
-              status={analysis.status}
-              progress={analysis.progress}
-              checkpoints={analysis.checkpoints}
-              onAnalyze={handleAnalyze}
-              onSelectTime={handleSelectTime}
-              canAnalyze={!!detector && duration > 0}
-              checkpointDefs={sport.checkpointDefs}
-              title={sport.checkpointsTitle}
-              analyzeLabel={sport.analyzeLabel}
-            />
+            <div className="app-analysis">
+              <ResultsPanel
+                status={analysis.status}
+                progress={analysis.progress}
+                checkpoints={analysis.checkpoints}
+                onAnalyze={handleAnalyze}
+                onSelectTime={handleSelectTime}
+                canAnalyze={!!detector && duration > 0}
+                checkpointDefs={sport.checkpointDefs}
+                title={sport.checkpointsTitle}
+                analyzeLabel={sport.analyzeLabel}
+              />
 
-            <CoachingPanel checkpoints={analysis.checkpoints} tipGenerator={sport.coach} title={sport.feedbackTitle} />
-          </>
+              <CoachingPanel checkpoints={analysis.checkpoints} tipGenerator={sport.coach} title={sport.feedbackTitle} />
+            </div>
+          </div>
         )}
       </main>
     </div>

@@ -18,7 +18,7 @@ export const VideoStage = forwardRef(function VideoStage(
 ) {
   return (
     <div className="video-stage">
-      <div className="video-stage-frame" style={aspectRatio ? { aspectRatio } : undefined}>
+      <div className="video-stage-frame" style={aspectRatio ? { aspectRatio, '--ar': aspectRatio } : undefined}>
         <video
           ref={videoRef}
           src={videoUrl}

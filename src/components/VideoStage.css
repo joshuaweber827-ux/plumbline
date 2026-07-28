@@ -4,8 +4,13 @@
 
 .video-stage-frame {
   position: relative;
-  width: 100%;
+  /* Cap height for portrait videos by bounding width from vh * aspect-ratio,
+     falling back to 100% for landscape clips. Width and aspect-ratio must
+     stay consistent with each other — the pose/annotation canvases assume
+     this box's rendered shape exactly matches the video's native pixels. */
+  width: min(100%, calc(62vh * var(--ar, 1.778)));
   aspect-ratio: 16 / 9;
+  margin: 0 auto;
   background: #0a1410;
   border-radius: 12px;
   overflow: hidden;

@@ -1,19 +1,19 @@
 .coaching-panel {
-  padding: 20px 22px 22px;
+  padding: 16px 18px 16px;
   background: rgba(15, 28, 18, 0.5);
   border: 1px solid var(--line);
   border-radius: 12px;
 }
 
 .coaching-panel h2 {
-  font-size: 20px;
-  margin-bottom: 14px;
+  font-size: 18px;
+  margin-bottom: 10px;
 }
 
 .coaching-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .coaching-columns {
@@ -42,7 +42,7 @@
 }
 
 .coaching-tip {
-  padding: 12px 14px;
+  padding: 9px 12px;
   border-radius: 8px;
   background: rgba(244, 241, 228, 0.04);
   border-left: 3px solid var(--chalk-dim);

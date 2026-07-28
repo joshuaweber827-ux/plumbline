@@ -1,49 +1,79 @@
 .app {
-  max-width: 920px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 40px 20px 80px;
+  padding: 22px 20px 40px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 14px;
 }
 
 .app-header {
   display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  column-gap: 20px;
+  row-gap: 10px;
+  margin-bottom: 4px;
+}
+
+.app-header-text {
+  display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 8px;
+  gap: 3px;
 }
 
 .app-title {
-  font-size: 42px;
-  letter-spacing: 0.06em;
+  font-size: 28px;
+  letter-spacing: 0.05em;
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .app-title::before {
   content: '';
   display: inline-block;
-  width: 6px;
-  height: 34px;
+  width: 5px;
+  height: 22px;
   background: var(--flag-orange);
   border-radius: 2px;
 }
 
 .app-subtitle {
-  font-size: 14px;
+  font-size: 12.5px;
   color: var(--chalk-dim);
-  margin-left: 18px;
+  margin-left: 15px;
 }
 
 .app-header .sport-tabs {
-  margin: 10px 0 0 18px;
+  margin: 0;
 }
 
 .app-main {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
+}
+
+.app-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.app-player,
+.app-analysis {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+@media (min-width: 980px) {
+  .app-columns {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  }
 }
