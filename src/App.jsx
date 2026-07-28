@@ -8,6 +8,7 @@ import { ResultsPanel } from './components/ResultsPanel'
 import { CoachingPanel } from './components/CoachingPanel'
 import { SportTabs } from './components/SportTabs'
 import { HomePage } from './components/HomePage'
+import { SportIllustration } from './components/SportIllustration'
 import { usePoseModel } from './hooks/usePoseModel'
 import { useLivePose } from './hooks/useLivePose'
 import { useAnnotations } from './hooks/useAnnotations'
@@ -210,6 +211,8 @@ function App() {
               activityLabel={sport.activityLabel}
               icon={sport.icon}
             />
+
+            {!videoUrl && <SportIllustration sport={sport} />}
 
             {videoUrl && (
               <div className="app-columns">
