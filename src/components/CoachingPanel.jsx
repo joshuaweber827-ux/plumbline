@@ -1,8 +1,7 @@
 import './CoachingPanel.css'
 
-export function CoachingPanel({ checkpoints, tipGenerator, title }) {
-  if (!checkpoints) return null
-  const tips = tipGenerator(checkpoints)
+export function CoachingPanel({ tips, title }) {
+  if (!tips || tips.length === 0) return null
 
   const goodTips = tips.filter((tip) => tip.severity === 'good')
   const watchTips = tips.filter((tip) => tip.severity === 'watch')
