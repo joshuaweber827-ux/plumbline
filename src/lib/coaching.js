@@ -1,5 +1,3 @@
-import { closenessScore } from './scoreCurve'
-
 const TEMPO_TARGET = 3
 const TEMPO_TOLERANCE = 0.6
 const SPINE_STABILITY_THRESHOLD = 8
@@ -9,9 +7,7 @@ const PLANE_CONSISTENCY_THRESHOLD = 12
 // Every tip compares the golfer's own swing against itself (tempo ratio,
 // posture change from setup to impact, etc.) rather than absolute "ideal"
 // angles — a single uncalibrated camera can't reliably support the latter,
-// but relative, self-referential deltas hold up regardless of framing. Each
-// tip also carries a scoreContribution (0-100, how close that dimension is
-// to ideal) that the overall form score averages across every check.
+// but relative, self-referential deltas hold up regardless of framing.
 export function generateCoachingTips(checkpoints) {
   if (!checkpoints) return []
   const { setup, backswing, top, impact } = checkpoints
@@ -22,12 +18,10 @@ export function generateCoachingTips(checkpoints) {
     const downswingDuration = impact.time - top.time
     if (backswingDuration > 0 && downswingDuration > 0) {
       const ratio = backswingDuration / downswingDuration
-      const scoreContribution = closenessScore(ratio - TEMPO_TARGET, TEMPO_TOLERANCE)
       if (ratio < TEMPO_TARGET - TEMPO_TOLERANCE) {
         tips.push({
           id: 'tempo-fast-downswing',
           severity: 'watch',
-          scoreContribution,
           title: 'Try slowing down at the top',
           detail: 'Your downswing happens much faster than your backswing. Pause briefly at the top before starting down — it usually helps timing.',
           betterForm:
@@ -37,7 +31,6 @@ export function generateCoachingTips(checkpoints) {
         tips.push({
           id: 'tempo-slow-downswing',
           severity: 'watch',
-          scoreContribution,
           title: 'Be more decisive coming down',
           detail: "You take your time going back, then ease into the ball. Try committing to the downswing a bit more — it's often where speed gets lost.",
           betterForm:
@@ -47,7 +40,6 @@ export function generateCoachingTips(checkpoints) {
         tips.push({
           id: 'tempo-good',
           severity: 'good',
-          scoreContribution,
           title: 'Good rhythm',
           detail: 'The pace of your backswing and downswing are well matched — that timing is a big part of a repeatable swing.',
         })
@@ -57,12 +49,10 @@ export function generateCoachingTips(checkpoints) {
 
   if (setup?.spineTilt != null && impact?.spineTilt != null) {
     const delta = Math.abs(impact.spineTilt - setup.spineTilt)
-    const scoreContribution = closenessScore(delta, SPINE_STABILITY_THRESHOLD)
     if (delta > SPINE_STABILITY_THRESHOLD) {
       tips.push({
         id: 'spine-stability-watch',
         severity: 'watch',
-        scoreContribution,
         title: 'Try holding your posture longer',
         detail: "Your body position at impact looks noticeably different from your setup. Try keeping the same forward bend you started with all the way through the ball — it usually leads to more solid contact.",
         betterForm:
@@ -72,7 +62,6 @@ export function generateCoachingTips(checkpoints) {
       tips.push({
         id: 'spine-stability-good',
         severity: 'good',
-        scoreContribution,
         title: 'Good, steady posture',
         detail: 'Your body position barely changes from setup to impact — that consistency helps you strike the ball the same way every time.',
       })
@@ -81,12 +70,10 @@ export function generateCoachingTips(checkpoints) {
 
   if (setup?.spineTilt != null && top?.spineTilt != null) {
     const delta = Math.abs(top.spineTilt - setup.spineTilt)
-    const scoreContribution = closenessScore(delta, SWAY_THRESHOLD)
     if (delta > SWAY_THRESHOLD) {
       tips.push({
         id: 'top-sway',
         severity: 'watch',
-        scoreContribution,
         title: 'Watch for swaying off the ball',
         detail: "Your upper body shifts a good amount going back. Try to turn in place rather than sliding side to side — it'll help you stay centered over the ball.",
         betterForm: 'A good backswing turn keeps your head roughly over the same spot — like turning inside a barrel instead of sliding to one side.',
@@ -95,7 +82,6 @@ export function generateCoachingTips(checkpoints) {
       tips.push({
         id: 'top-sway-good',
         severity: 'good',
-        scoreContribution,
         title: 'Stayed centered on the backswing',
         detail: 'Your upper body stays fairly centered as you swing back — a stable base to swing down from.',
       })
@@ -104,12 +90,10 @@ export function generateCoachingTips(checkpoints) {
 
   if (backswing?.swingPlane != null && top?.swingPlane != null) {
     const delta = Math.abs(top.swingPlane - backswing.swingPlane)
-    const scoreContribution = closenessScore(delta, PLANE_CONSISTENCY_THRESHOLD)
     if (delta > PLANE_CONSISTENCY_THRESHOLD) {
       tips.push({
         id: 'plane-consistency',
         severity: 'watch',
-        scoreContribution,
         title: 'Backswing path could be more consistent',
         detail: 'Your hands and arms change direction noticeably right near the top of your backswing. A smoother, more consistent path back tends to make the downswing easier to repeat.',
         betterForm:
@@ -119,7 +103,6 @@ export function generateCoachingTips(checkpoints) {
       tips.push({
         id: 'plane-consistency-good',
         severity: 'good',
-        scoreContribution,
         title: 'Consistent backswing path',
         detail: 'Your hands and arms keep a steady path into the top of your backswing — that repeatability helps the downswing.',
       })

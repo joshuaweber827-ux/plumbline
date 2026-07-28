@@ -6,13 +6,11 @@ import { AnnotationControls } from './components/AnnotationControls'
 import { LiveReadout } from './components/LiveReadout'
 import { ResultsPanel } from './components/ResultsPanel'
 import { CoachingPanel } from './components/CoachingPanel'
-import { FormScore } from './components/FormScore'
 import { SportTabs } from './components/SportTabs'
 import { HomePage } from './components/HomePage'
 import { usePoseModel } from './hooks/usePoseModel'
 import { useLivePose } from './hooks/useLivePose'
 import { useAnnotations } from './hooks/useAnnotations'
-import { scoreFromTips } from './lib/formScore'
 import { HOME_VIEW } from './sports/home'
 import { golfSport } from './sports/golf'
 import { basketballSport } from './sports/basketball'
@@ -190,7 +188,6 @@ function App() {
     () => (analysis.checkpoints ? sport.coach(analysis.checkpoints) : []),
     [analysis.checkpoints, sport],
   )
-  const scoreResult = useMemo(() => scoreFromTips(tips), [tips])
 
   return (
     <div className="app">
@@ -246,8 +243,6 @@ function App() {
                 </div>
 
                 <div className="app-analysis">
-                  <FormScore result={scoreResult} activityLabel={sport.activityLabel} />
-
                   <ResultsPanel
                     status={analysis.status}
                     progress={analysis.progress}
