@@ -7,6 +7,7 @@ export const basketballSport = {
   label: 'Basketball',
   icon: '🏀',
   tagline: 'Real pose-detection shooting form analysis, right in your browser',
+  blurb: 'Elbow angle, release extension, and balance on your shot.',
   activityLabel: 'shot',
   analyzeLabel: 'Analyze Shot',
   checkpointsTitle: 'Shot Checkpoints',

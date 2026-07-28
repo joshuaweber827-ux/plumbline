@@ -7,6 +7,7 @@ export const soccerSport = {
   label: 'Soccer',
   icon: '⚽',
   tagline: 'Real pose-detection kick analysis, right in your browser',
+  blurb: 'Hip rotation, knee bend, and balance on your kick.',
   activityLabel: 'kick',
   analyzeLabel: 'Analyze Kick',
   checkpointsTitle: 'Kick Checkpoints',

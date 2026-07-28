@@ -7,6 +7,7 @@ export const baseballSport = {
   label: 'Baseball',
   icon: '⚾',
   tagline: 'Real pose-detection swing analysis, right in your browser',
+  blurb: 'Torso separation, extension, and balance on your swing.',
   activityLabel: 'swing',
   analyzeLabel: 'Analyze Swing',
   checkpointsTitle: 'Swing Checkpoints',

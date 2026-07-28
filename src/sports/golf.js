@@ -7,6 +7,7 @@ export const golfSport = {
   label: 'Golf',
   icon: '⛳',
   tagline: 'Real pose-detection swing analysis, right in your browser',
+  blurb: 'Swing plane, tempo, and posture from real pose tracking.',
   activityLabel: 'swing',
   analyzeLabel: 'Analyze Swing',
   checkpointsTitle: 'Swing Checkpoints',

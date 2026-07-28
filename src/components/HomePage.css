@@ -1,0 +1,100 @@
+.home-page {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.home-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 640px;
+}
+
+.home-intro-title {
+  font-size: 24px;
+}
+
+.home-intro-detail {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--chalk-dim);
+}
+
+.home-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.home-step {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(15, 28, 18, 0.5);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.home-step-number {
+  font-size: 20px;
+  color: var(--flag-orange-bright);
+  line-height: 1;
+}
+
+.home-step-title {
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+.home-step-detail {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--chalk-dim);
+}
+
+.home-sports {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.home-sport-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 18px 18px 20px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(244, 241, 228, 0.04);
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.home-sport-card:hover {
+  background: rgba(244, 241, 228, 0.08);
+  border-color: var(--flag-orange);
+  transform: translateY(-1px);
+}
+
+.home-sport-icon {
+  font-size: 28px;
+}
+
+.home-sport-label {
+  font-family: var(--font-display);
+  font-size: 17px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--chalk);
+}
+
+.home-sport-blurb {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--chalk-dim);
+}

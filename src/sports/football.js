@@ -7,6 +7,7 @@ export const footballSport = {
   label: 'Football',
   icon: '🏈',
   tagline: 'Real pose-detection throwing form analysis, right in your browser',
+  blurb: 'Arm mechanics, knee drive, and balance on your throw.',
   activityLabel: 'throw',
   analyzeLabel: 'Analyze Throw',
   checkpointsTitle: 'Throw Checkpoints',

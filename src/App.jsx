@@ -7,9 +7,11 @@ import { LiveReadout } from './components/LiveReadout'
 import { ResultsPanel } from './components/ResultsPanel'
 import { CoachingPanel } from './components/CoachingPanel'
 import { SportTabs } from './components/SportTabs'
+import { HomePage } from './components/HomePage'
 import { usePoseModel } from './hooks/usePoseModel'
 import { useLivePose } from './hooks/useLivePose'
 import { useAnnotations } from './hooks/useAnnotations'
+import { HOME_VIEW } from './sports/home'
 import { golfSport } from './sports/golf'
 import { basketballSport } from './sports/basketball'
 import { baseballSport } from './sports/baseball'
@@ -18,6 +20,7 @@ import { footballSport } from './sports/football'
 import './App.css'
 
 const SPORTS = [golfSport, basketballSport, baseballSport, soccerSport, footballSport]
+const TABS = [HOME_VIEW, ...SPORTS]
 
 function App() {
   const videoRef = useRef(null)
@@ -52,7 +55,7 @@ function App() {
     [bumpMountTick],
   )
 
-  const [sport, setSport] = useState(golfSport)
+  const [sport, setSport] = useState(HOME_VIEW)
   const [videoUrl, setVideoUrl] = useState(null)
   const [duration, setDuration] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
@@ -188,59 +191,70 @@ function App() {
           <h1 className="app-title">CoachCam</h1>
           <p className="app-subtitle">{sport.tagline}</p>
         </div>
-        <SportTabs sports={SPORTS} activeId={sport.id} onSelect={handleSelectSport} />
+        <SportTabs sports={TABS} activeId={sport.id} onSelect={handleSelectSport} />
       </header>
 
       <main className="app-main">
-        <VideoUploader onFileSelected={handleFileSelected} hasVideo={!!videoUrl} activityLabel={sport.activityLabel} icon={sport.icon} />
+        {sport.id === 'home' ? (
+          <HomePage sports={SPORTS} onSelectSport={handleSelectSport} />
+        ) : (
+          <>
+            <VideoUploader
+              onFileSelected={handleFileSelected}
+              hasVideo={!!videoUrl}
+              activityLabel={sport.activityLabel}
+              icon={sport.icon}
+            />
 
-        {videoUrl && (
-          <div className="app-columns">
-            <div className="app-player">
-              <VideoStage
-                ref={attachVideoRef}
-                videoUrl={videoUrl}
-                onLoadedMetadata={handleLoadedMetadata}
-                onTimeUpdate={handleTimeUpdate}
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
-                poseCanvasRef={attachPoseCanvasRef}
-                annotationCanvasRef={attachAnnotationCanvasRef}
-                modelStatus={modelStatus}
-                isPaused={!isPlaying}
-                aspectRatio={aspectRatio}
-              />
+            {videoUrl && (
+              <div className="app-columns">
+                <div className="app-player">
+                  <VideoStage
+                    ref={attachVideoRef}
+                    videoUrl={videoUrl}
+                    onLoadedMetadata={handleLoadedMetadata}
+                    onTimeUpdate={handleTimeUpdate}
+                    onPlay={() => setIsPlaying(true)}
+                    onPause={() => setIsPlaying(false)}
+                    poseCanvasRef={attachPoseCanvasRef}
+                    annotationCanvasRef={attachAnnotationCanvasRef}
+                    modelStatus={modelStatus}
+                    isPaused={!isPlaying}
+                    aspectRatio={aspectRatio}
+                  />
 
-              <LiveReadout metrics={liveMetrics} detected={!!currentKeypoints} />
+                  <LiveReadout metrics={liveMetrics} detected={!!currentKeypoints} />
 
-              <PlaybackControls
-                videoRef={videoRef}
-                duration={duration}
-                currentTime={currentTime}
-                isPlaying={isPlaying}
-                onTogglePlay={togglePlay}
-                onSeek={handleSeek}
-              />
+                  <PlaybackControls
+                    videoRef={videoRef}
+                    duration={duration}
+                    currentTime={currentTime}
+                    isPlaying={isPlaying}
+                    onTogglePlay={togglePlay}
+                    onSeek={handleSeek}
+                  />
 
-              <AnnotationControls isPaused={!isPlaying} lineCount={lines.length} onUndo={undo} onClear={clear} canUndo={canUndo} />
-            </div>
+                  <AnnotationControls isPaused={!isPlaying} lineCount={lines.length} onUndo={undo} onClear={clear} canUndo={canUndo} />
+                </div>
 
-            <div className="app-analysis">
-              <ResultsPanel
-                status={analysis.status}
-                progress={analysis.progress}
-                checkpoints={analysis.checkpoints}
-                onAnalyze={handleAnalyze}
-                onSelectTime={handleSelectTime}
-                canAnalyze={!!detector && duration > 0}
-                checkpointDefs={sport.checkpointDefs}
-                title={sport.checkpointsTitle}
-                analyzeLabel={sport.analyzeLabel}
-              />
+                <div className="app-analysis">
+                  <ResultsPanel
+                    status={analysis.status}
+                    progress={analysis.progress}
+                    checkpoints={analysis.checkpoints}
+                    onAnalyze={handleAnalyze}
+                    onSelectTime={handleSelectTime}
+                    canAnalyze={!!detector && duration > 0}
+                    checkpointDefs={sport.checkpointDefs}
+                    title={sport.checkpointsTitle}
+                    analyzeLabel={sport.analyzeLabel}
+                  />
 
-              <CoachingPanel checkpoints={analysis.checkpoints} tipGenerator={sport.coach} title={sport.feedbackTitle} />
-            </div>
-          </div>
+                  <CoachingPanel checkpoints={analysis.checkpoints} tipGenerator={sport.coach} title={sport.feedbackTitle} />
+                </div>
+              </div>
+            )}
+          </>
         )}
       </main>
     </div>
