@@ -96,3 +96,12 @@
   font-size: 13px;
   color: rgba(15, 28, 18, 0.55);
 }
+
+.results-no-match {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(196, 80, 46, 0.08);
+  border: 1px solid rgba(196, 80, 46, 0.25);
+  color: var(--ink);
+  line-height: 1.5;
+}

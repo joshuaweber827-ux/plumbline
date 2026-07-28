@@ -1,7 +1,12 @@
-import { ankleDistance, hipLineAngle, kneeBendAngle, spineTiltAngle } from './angles'
-import { indexOfMax, indexOfMin, seekTo } from './videoSampling'
+import { ankleDistance, hipLineAngle, kneeBendAngle, spineTiltAngle, torsoLength } from './angles'
+import { indexOfMax, indexOfMin, median, rangeOf, seekTo } from './videoSampling'
 
 const SAMPLE_COUNT = 48
+
+// A real kick swings the kicking foot a substantial fraction of a
+// torso-length away from the plant foot; kept lenient on purpose (see
+// analyzeSwing.js).
+const MOTION_THRESHOLD = 0.45
 
 // Steps through the whole clip, then derives six checkpoints using ankle
 // separation as the core signal: the kicking foot swings far from the plant
@@ -24,7 +29,12 @@ export async function analyzeKick(video, detector, { onProgress } = {}) {
   const withSignals = samples.map((s) => ({
     ...s,
     ankleGap: s.keypoints ? ankleDistance(s.keypoints) : null,
+    torso: s.keypoints ? torsoLength(s.keypoints) : null,
   }))
+
+  const scale = median(withSignals.map((s) => s.torso))
+  const gapRange = rangeOf(withSignals.map((s) => s.ankleGap))
+  const plausible = scale != null && gapRange != null && gapRange / scale > MOTION_THRESHOLD
 
   const stanceIndex = 0
 
@@ -63,5 +73,5 @@ export async function analyzeKick(video, detector, { onProgress } = {}) {
     }
   }
 
-  return { samples, checkpoints }
+  return { samples, checkpoints, plausible }
 }

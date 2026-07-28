@@ -1,7 +1,11 @@
-import { averageHipY, averageWristY, elbowAngle, kneeBendAngle, spineTiltAngle } from './angles'
-import { indexOfMax, indexOfMin, seekTo } from './videoSampling'
+import { averageHipY, averageWristY, elbowAngle, kneeBendAngle, spineTiltAngle, torsoLength } from './angles'
+import { indexOfMax, indexOfMin, median, rangeOf, seekTo } from './videoSampling'
 
 const SAMPLE_COUNT = 48
+
+// A real shot lifts the hands a substantial fraction of a torso-length
+// upward toward release; kept lenient on purpose (see analyzeSwing.js).
+const MOTION_THRESHOLD = 0.35
 
 // Steps through the whole clip, running pose detection on evenly spaced
 // samples, then derives six checkpoints from the real keypoint data: the
@@ -25,7 +29,12 @@ export async function analyzeShot(video, detector, { onProgress } = {}) {
     ...s,
     wristY: s.keypoints ? averageWristY(s.keypoints) : null,
     hipY: s.keypoints ? averageHipY(s.keypoints) : null,
+    torso: s.keypoints ? torsoLength(s.keypoints) : null,
   }))
+
+  const scale = median(withSignals.map((s) => s.torso))
+  const wristRange = rangeOf(withSignals.map((s) => s.wristY))
+  const plausible = scale != null && wristRange != null && wristRange / scale > MOTION_THRESHOLD
 
   const stanceIndex = 0
 
@@ -60,5 +69,5 @@ export async function analyzeShot(video, detector, { onProgress } = {}) {
     }
   }
 
-  return { samples, checkpoints }
+  return { samples, checkpoints, plausible }
 }

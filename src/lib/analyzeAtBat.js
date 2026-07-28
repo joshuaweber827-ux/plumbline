@@ -1,7 +1,12 @@
 import { averageWristPosition, elbowAngle, hipShoulderSeparation, kneeBendAngle, spineTiltAngle } from './angles'
-import { indexOfMax, seekTo } from './videoSampling'
+import { indexOfMax, rangeOf, seekTo } from './videoSampling'
 
 const SAMPLE_COUNT = 48
+
+// A real swing coils and uncoils through a meaningful amount of hip-shoulder
+// separation; degrees are already scale-free, so no torso normalization is
+// needed here. Kept lenient on purpose (see analyzeSwing.js).
+const SEPARATION_MOTION_THRESHOLD = 14
 
 function wristDistance(a, b) {
   if (!a || !b) return null
@@ -31,6 +36,9 @@ export async function analyzeAtBat(video, detector, { onProgress } = {}) {
     wristPos: s.keypoints ? averageWristPosition(s.keypoints) : null,
     separation: s.keypoints ? hipShoulderSeparation(s.keypoints) : null,
   }))
+
+  const separationRange = rangeOf(withSignals.map((s) => s.separation))
+  const plausible = separationRange != null && separationRange > SEPARATION_MOTION_THRESHOLD
 
   const stanceIndex = 0
 
@@ -67,5 +75,5 @@ export async function analyzeAtBat(video, detector, { onProgress } = {}) {
     }
   }
 
-  return { samples, checkpoints }
+  return { samples, checkpoints, plausible }
 }

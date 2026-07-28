@@ -35,6 +35,20 @@ function pickConfidentSide(kp, leftNames, rightNames) {
   return best.every((p) => p.score >= MIN_KEYPOINT_SCORE) ? best : null
 }
 
+// Pixel distance between the shoulder midpoint and hip midpoint — a rough
+// per-person scale reference used to normalize pixel-based motion signals
+// (which otherwise vary with video resolution and how tightly framed the
+// shot is), so a "is this actually swinging/kicking/throwing" check holds
+// up across different videos.
+export function torsoLength(keypoints) {
+  const kp = keypointsByName(keypoints)
+  const { left_shoulder, right_shoulder, left_hip, right_hip } = kp
+  if (!confident(left_shoulder, right_shoulder, left_hip, right_hip)) return null
+  const shoulderMid = midpoint(left_shoulder, right_shoulder)
+  const hipMid = midpoint(left_hip, right_hip)
+  return Math.hypot(shoulderMid.x - hipMid.x, shoulderMid.y - hipMid.y)
+}
+
 // Angle of the shoulder-midpoint -> hip-midpoint line, measured from true
 // vertical. 0 = perfectly upright, positive = tilted toward screen-right.
 export function spineTiltAngle(keypoints) {

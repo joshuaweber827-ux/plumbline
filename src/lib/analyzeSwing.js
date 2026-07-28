@@ -1,7 +1,12 @@
-import { averageWristY, spineTiltAngle, wristLineAngle } from './angles'
-import { seekTo, indexOfMin } from './videoSampling'
+import { averageWristY, spineTiltAngle, torsoLength, wristLineAngle } from './angles'
+import { seekTo, indexOfMin, median, rangeOf } from './videoSampling'
 
 const SAMPLE_COUNT = 48
+
+// A real backswing lifts the hands a substantial fraction of a torso-length
+// upward; this floor is deliberately lenient (a false "wrong sport" verdict
+// on a genuine swing is worse than occasionally missing a mismatch).
+const MOTION_THRESHOLD = 0.35
 
 // Steps through the whole clip, running pose detection on evenly spaced
 // samples, then derives the six checkpoints from the real keypoint data:
@@ -24,7 +29,12 @@ export async function analyzeSwing(video, detector, { onProgress } = {}) {
   const withWristY = samples.map((s) => ({
     ...s,
     wristY: s.keypoints ? averageWristY(s.keypoints) : null,
+    torso: s.keypoints ? torsoLength(s.keypoints) : null,
   }))
+
+  const scale = median(withWristY.map((s) => s.torso))
+  const wristRange = rangeOf(withWristY.map((s) => s.wristY))
+  const plausible = scale != null && wristRange != null && wristRange / scale > MOTION_THRESHOLD
 
   const addressIndex = 0
 
@@ -65,5 +75,5 @@ export async function analyzeSwing(video, detector, { onProgress } = {}) {
     }
   }
 
-  return { samples, checkpoints }
+  return { samples, checkpoints, plausible }
 }

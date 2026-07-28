@@ -11,6 +11,7 @@ export function ResultsPanel({
   checkpointDefs,
   title,
   analyzeLabel,
+  activityLabel,
 }) {
   return (
     <div className="results-panel">
@@ -43,6 +44,13 @@ export function ResultsPanel({
 
       {status === 'idle' && !checkpoints && (
         <p className="results-empty">Upload a video and run analysis to populate checkpoints.</p>
+      )}
+
+      {status === 'no-match' && (
+        <p className="results-empty results-no-match">
+          We couldn't find a clear {activityLabel} in this video — try a well-lit clip with the person fully in
+          frame, or check that you've uploaded a matching video for this tab.
+        </p>
       )}
     </div>
   )

@@ -145,10 +145,10 @@ function App() {
     const wasTime = video.currentTime
     setAnalysis({ status: 'analyzing', progress: 0, checkpoints: null })
     try {
-      const { checkpoints } = await sport.analyze(video, detector, {
+      const { checkpoints, plausible } = await sport.analyze(video, detector, {
         onProgress: (progress) => setAnalysis((prev) => ({ ...prev, progress })),
       })
-      setAnalysis({ status: 'done', progress: 1, checkpoints })
+      setAnalysis(plausible ? { status: 'done', progress: 1, checkpoints } : { status: 'no-match', progress: 1, checkpoints: null })
     } finally {
       video.currentTime = wasTime
     }
@@ -248,6 +248,7 @@ function App() {
                     checkpointDefs={sport.checkpointDefs}
                     title={sport.checkpointsTitle}
                     analyzeLabel={sport.analyzeLabel}
+                    activityLabel={sport.activityLabel}
                   />
 
                   <CoachingPanel checkpoints={analysis.checkpoints} tipGenerator={sport.coach} title={sport.feedbackTitle} />

@@ -1,7 +1,12 @@
 import { elbowAngle, kneeBendAngle, spineTiltAngle } from './angles'
-import { indexOfMax, indexOfMin, seekTo } from './videoSampling'
+import { indexOfMax, indexOfMin, rangeOf, seekTo } from './videoSampling'
 
 const SAMPLE_COUNT = 48
+
+// A real throw flexes and extends the elbow through a meaningful range;
+// degrees are already scale-free, so no torso normalization is needed here.
+// Kept lenient on purpose (see analyzeSwing.js).
+const ELBOW_MOTION_THRESHOLD = 25
 
 // Steps through the whole clip, then derives six checkpoints from elbow
 // angle trajectory: the load is where the throwing arm is most bent (ball
@@ -25,6 +30,9 @@ export async function analyzeThrow(video, detector, { onProgress } = {}) {
     ...s,
     elbow: s.keypoints ? elbowAngle(s.keypoints) : null,
   }))
+
+  const elbowRange = rangeOf(withSignals.map((s) => s.elbow))
+  const plausible = elbowRange != null && elbowRange > ELBOW_MOTION_THRESHOLD
 
   const stanceIndex = 0
 
@@ -59,5 +67,5 @@ export async function analyzeThrow(video, detector, { onProgress } = {}) {
     }
   }
 
-  return { samples, checkpoints }
+  return { samples, checkpoints, plausible }
 }
