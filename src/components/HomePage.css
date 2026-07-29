@@ -1,71 +1,71 @@
 .home-page {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
 .home-intro {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
   max-width: 640px;
 }
 
 .home-intro-title {
-  font-size: 19px;
+  font-size: 23px;
 }
 
 .home-intro-detail {
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.45;
   color: var(--chalk-dim);
 }
 
 .home-steps {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 8px;
 }
 
 .home-step {
   display: flex;
   gap: 10px;
-  padding: 10px 12px;
+  padding: 8px 10px;
   background: rgba(15, 28, 18, 0.5);
   border: 1px solid var(--line);
   border-radius: 10px;
 }
 
 .home-step-number {
-  font-size: 17px;
+  font-size: 18px;
   color: var(--flag-orange-bright);
   line-height: 1;
 }
 
 .home-step-title {
-  font-size: 13px;
+  font-size: 15px;
   letter-spacing: 0.04em;
   margin-bottom: 2px;
 }
 
 .home-step-detail {
-  font-size: 12px;
-  line-height: 1.4;
+  font-size: 13.5px;
+  line-height: 1.35;
   color: var(--chalk-dim);
 }
 
 .home-sports {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 8px;
 }
 
 .home-sport-card {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
-  padding: 12px 14px 14px;
+  gap: 3px;
+  padding: 10px 12px 12px;
   border-radius: 12px;
   border: 1px solid var(--line);
   background: rgba(244, 241, 228, 0.04);
@@ -82,36 +82,36 @@
 }
 
 .home-sport-icon {
-  font-size: 22px;
+  font-size: 24px;
 }
 
 .home-sport-label {
   font-family: var(--font-display);
-  font-size: 14.5px;
+  font-size: 16.5px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--chalk);
 }
 
 .home-sport-blurb {
-  font-size: 12px;
-  line-height: 1.45;
+  font-size: 13.5px;
+  line-height: 1.35;
   color: var(--chalk-dim);
 }
 
 .home-footer {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 58px;
+  gap: 10px;
+  margin-top: 42px;
 }
 
 .home-about,
 .home-sources {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 12px 14px;
+  gap: 5px;
+  padding: 10px 12px;
   background: rgba(15, 28, 18, 0.5);
   border: 1px solid var(--line);
   border-radius: 10px;
@@ -119,19 +119,19 @@
 
 .home-about-title,
 .home-sources-title {
-  font-size: 14.5px;
+  font-size: 16.5px;
 }
 
 .home-about-detail {
-  font-size: 12.5px;
-  line-height: 1.5;
+  font-size: 14px;
+  line-height: 1.4;
   color: var(--chalk-dim);
 }
 
 .home-sources-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 8px 14px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 6px 12px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -142,7 +142,7 @@
   display: flex;
   flex-direction: column;
   gap: 1px;
-  padding-left: 18px;
+  padding-left: 20px;
   position: relative;
   counter-increment: source;
 }
@@ -153,19 +153,19 @@
   left: 0;
   top: 1px;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12.5px;
   color: var(--flag-orange-bright);
 }
 
 .home-source-title {
   font-family: var(--font-display);
-  font-size: 12.5px;
+  font-size: 14px;
   letter-spacing: 0.03em;
   color: var(--chalk);
 }
 
 .home-source-detail {
-  font-size: 11.5px;
-  line-height: 1.4;
+  font-size: 13px;
+  line-height: 1.35;
   color: var(--chalk-dim);
 }
