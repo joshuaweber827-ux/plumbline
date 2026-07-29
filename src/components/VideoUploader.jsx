@@ -20,6 +20,8 @@ export function VideoUploader({ onFileSelected, hasVideo, activityLabel, icon })
         <span className="uploader-hint">MP4, MOV, or WebM — analyzed locally in your browser</span>
       </label>
       <input id={inputId} type="file" accept="video/*" onChange={handleChange} className="uploader-input" />
+
+      <p className="uploader-note">Video your self and upload it from your photos!</p>
     </div>
   )
 }
