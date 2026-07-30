@@ -11,40 +11,6 @@
   gap: 6px;
 }
 
-.chat-header-top {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.chat-robot {
-  width: 52px;
-  height: 52px;
-  flex-shrink: 0;
-}
-
-.cr-outline {
-  fill: rgba(244, 241, 228, 0.03);
-  stroke: var(--sand);
-  stroke-width: 3;
-}
-
-.cr-fill {
-  fill: var(--flag-orange);
-}
-
-.cr-line {
-  stroke: var(--flag-orange-bright);
-  stroke-width: 3;
-  stroke-linecap: round;
-}
-
-.cr-line-thin {
-  stroke: var(--sand);
-  stroke-width: 3;
-  stroke-linecap: round;
-}
-
 .chat-title {
   font-size: 22px;
 }
