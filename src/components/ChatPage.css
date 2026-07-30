@@ -1,0 +1,124 @@
+.chat-page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 760px;
+}
+
+.chat-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.chat-title {
+  font-size: 22px;
+}
+
+.chat-disclaimer {
+  font-size: 12.5px;
+  color: var(--chalk-dim);
+  line-height: 1.5;
+}
+
+.chat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 46vh;
+  min-height: 220px;
+  overflow-y: auto;
+  padding: 14px;
+  background: rgba(15, 28, 18, 0.5);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.chat-bubble {
+  max-width: 78%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.chat-bubble-bot {
+  align-self: flex-start;
+  background: rgba(244, 241, 228, 0.06);
+  border: 1px solid var(--line);
+  color: var(--chalk);
+  border-bottom-left-radius: 4px;
+}
+
+.chat-bubble-user {
+  align-self: flex-end;
+  background: var(--flag-orange);
+  color: var(--chalk);
+  border-bottom-right-radius: 4px;
+}
+
+.chat-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chat-suggestion {
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(244, 241, 228, 0.03);
+  color: var(--chalk-dim);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.chat-suggestion:hover {
+  border-color: var(--sand);
+  color: var(--chalk);
+  background: rgba(244, 241, 228, 0.08);
+}
+
+.chat-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--sand);
+  background: rgba(15, 28, 18, 0.5);
+  color: var(--chalk);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+}
+
+.chat-input:focus {
+  outline: none;
+  border-color: var(--flag-orange-bright);
+}
+
+.chat-send-btn {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  background: var(--flag-orange);
+  color: var(--chalk);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.chat-send-btn:hover:not(:disabled) {
+  background: var(--flag-orange-bright);
+}
+
+.chat-send-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

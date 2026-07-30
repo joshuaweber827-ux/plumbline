@@ -9,10 +9,12 @@ import { CoachingPanel } from './components/CoachingPanel'
 import { SportTabs } from './components/SportTabs'
 import { HomePage } from './components/HomePage'
 import { SportIllustration } from './components/SportIllustration'
+import { ChatPage } from './components/ChatPage'
 import { usePoseModel } from './hooks/usePoseModel'
 import { useLivePose } from './hooks/useLivePose'
 import { useAnnotations } from './hooks/useAnnotations'
 import { HOME_VIEW } from './sports/home'
+import { CHAT_VIEW } from './sports/chat'
 import { golfSport } from './sports/golf'
 import { basketballSport } from './sports/basketball'
 import { baseballSport } from './sports/baseball'
@@ -21,7 +23,7 @@ import { footballSport } from './sports/football'
 import './App.css'
 
 const SPORTS = [golfSport, basketballSport, baseballSport, soccerSport, footballSport]
-const TABS = [HOME_VIEW, ...SPORTS]
+const TABS = [HOME_VIEW, ...SPORTS, CHAT_VIEW]
 
 function App() {
   const videoRef = useRef(null)
@@ -203,6 +205,8 @@ function App() {
       <main className="app-main">
         {sport.id === 'home' ? (
           <HomePage sports={SPORTS} onSelectSport={handleSelectSport} />
+        ) : sport.id === 'chat' ? (
+          <ChatPage />
         ) : (
           <>
             <VideoUploader
