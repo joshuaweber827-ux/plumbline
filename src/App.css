@@ -9,11 +9,8 @@
 
 .app-header {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  column-gap: 20px;
-  row-gap: 10px;
+  flex-direction: column;
+  gap: 14px;
   margin-bottom: 2px;
 }
 
@@ -48,7 +45,7 @@
 }
 
 .app-header .sport-tabs {
-  margin: 0;
+  width: 100%;
 }
 
 .app-main {
