@@ -48,7 +48,19 @@ export function ChatPage() {
   return (
     <div className="chat-page">
       <div className="chat-header">
-        <h2 className="chat-title">Coach Chat</h2>
+        <div className="chat-header-top">
+          <svg viewBox="0 0 100 100" className="chat-robot" aria-hidden="true">
+            <line x1="50" y1="8" x2="50" y2="20" className="cr-line" />
+            <circle cx="50" cy="6" r="4" className="cr-fill" />
+            <rect x="18" y="20" width="64" height="52" rx="14" className="cr-outline" />
+            <line x1="18" y1="40" x2="8" y2="40" className="cr-line-thin" />
+            <line x1="82" y1="40" x2="92" y2="40" className="cr-line-thin" />
+            <circle cx="38" cy="46" r="6" className="cr-fill" />
+            <circle cx="62" cy="46" r="6" className="cr-fill" />
+            <rect x="34" y="58" width="32" height="6" rx="3" className="cr-fill" />
+          </svg>
+          <h2 className="chat-title">Coach Cameron</h2>
+        </div>
         <p className="chat-disclaimer">
           Answers come from a curated set of general training tips, not a live AI — for open-ended coaching, this is
           a starting point, not a substitute for a real coach.
