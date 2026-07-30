@@ -1,3 +1,5 @@
+import { ensureOneStrength } from './feedbackBalance'
+
 const TEMPO_TARGET = 3
 const TEMPO_TOLERANCE = 0.6
 const SPINE_STABILITY_THRESHOLD = 8
@@ -12,6 +14,7 @@ export function generateCoachingTips(checkpoints) {
   if (!checkpoints) return []
   const { setup, backswing, top, impact } = checkpoints
   const tips = []
+  const watchCandidates = []
 
   if (setup && top && impact) {
     const backswingDuration = top.time - setup.time
@@ -27,6 +30,13 @@ export function generateCoachingTips(checkpoints) {
           betterForm:
             "Good tempo often feels like counting \"1-2-3\" going back and \"1\" coming down — a clear pause at the top before the club starts moving again.",
         })
+        watchCandidates.push({
+          id: 'tempo-fast-downswing',
+          ratio: Math.abs(ratio - TEMPO_TARGET) / TEMPO_TOLERANCE,
+          closeTitle: 'Tempo is your strongest area',
+          closeDetail:
+            'Your swing tempo is the closest of your checks to that smooth rhythm — a bit more of a pause at the top and it\'ll click.',
+        })
       } else if (ratio > TEMPO_TARGET + TEMPO_TOLERANCE) {
         tips.push({
           id: 'tempo-slow-downswing',
@@ -35,6 +45,13 @@ export function generateCoachingTips(checkpoints) {
           detail: "You take your time going back, then ease into the ball. Try committing to the downswing a bit more — it's often where speed gets lost.",
           betterForm:
             'Try feeling a smooth build in speed through the downswing, so your fastest moment is right at the ball — not before it.',
+        })
+        watchCandidates.push({
+          id: 'tempo-slow-downswing',
+          ratio: Math.abs(ratio - TEMPO_TARGET) / TEMPO_TOLERANCE,
+          closeTitle: 'Tempo is your strongest area',
+          closeDetail:
+            'Your swing tempo is the closest of your checks to that smooth rhythm — a bit more commitment coming down and it\'ll click.',
         })
       } else {
         tips.push({
@@ -58,6 +75,13 @@ export function generateCoachingTips(checkpoints) {
         betterForm:
           'Picture a line running from the top of your head through your tailbone at address — solid ball-strikers keep roughly that same tilt all the way to impact instead of standing up or dropping down.',
       })
+      watchCandidates.push({
+        id: 'spine-stability-watch',
+        ratio: delta / SPINE_STABILITY_THRESHOLD,
+        closeTitle: 'Posture is your strongest area',
+        closeDetail:
+          'Your posture holds up better than your other checks — keep working on holding that same forward bend all the way to impact.',
+      })
     } else {
       tips.push({
         id: 'spine-stability-good',
@@ -77,6 +101,13 @@ export function generateCoachingTips(checkpoints) {
         title: 'Watch for swaying off the ball',
         detail: "Your upper body shifts a good amount going back. Try to turn in place rather than sliding side to side — it'll help you stay centered over the ball.",
         betterForm: 'A good backswing turn keeps your head roughly over the same spot — like turning inside a barrel instead of sliding to one side.',
+      })
+      watchCandidates.push({
+        id: 'top-sway',
+        ratio: delta / SWAY_THRESHOLD,
+        closeTitle: 'Staying centered is your strongest area',
+        closeDetail:
+          'You stay more centered on the backswing than your other checks show — a little less side-to-side shift and you\'ll be locked in.',
       })
     } else {
       tips.push({
@@ -99,6 +130,13 @@ export function generateCoachingTips(checkpoints) {
         betterForm:
           'A repeatable backswing keeps the club moving on one steady path from takeaway to the top, without a late steepening or flattening move.',
       })
+      watchCandidates.push({
+        id: 'plane-consistency',
+        ratio: delta / PLANE_CONSISTENCY_THRESHOLD,
+        closeTitle: 'Backswing path is your strongest area',
+        closeDetail:
+          'Your backswing path holds up better than your other checks — smoothing out that late direction change will make it fully consistent.',
+      })
     } else {
       tips.push({
         id: 'plane-consistency-good',
@@ -109,8 +147,10 @@ export function generateCoachingTips(checkpoints) {
     }
   }
 
-  if (tips.length === 0) {
-    tips.push({
+  const balanced = ensureOneStrength(tips, watchCandidates)
+
+  if (balanced.length === 0) {
+    balanced.push({
       id: 'no-signal',
       severity: 'info',
       title: "Couldn't get a clear read on your swing",
@@ -118,5 +158,5 @@ export function generateCoachingTips(checkpoints) {
     })
   }
 
-  return tips
+  return balanced
 }

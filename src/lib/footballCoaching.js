@@ -1,3 +1,5 @@
+import { ensureOneStrength } from './feedbackBalance'
+
 const LOAD_ELBOW_MAX = 130
 const RELEASE_EXTENSION_TARGET = 155
 const KNEE_BEND_THRESHOLD = 165
@@ -11,6 +13,7 @@ export function generateThrowCoachingTips(checkpoints) {
   if (!checkpoints) return []
   const { stance, load, stride, release, finish } = checkpoints
   const tips = []
+  const watchCandidates = []
 
   if (load?.elbow != null) {
     if (load.elbow > LOAD_ELBOW_MAX) {
@@ -21,6 +24,12 @@ export function generateThrowCoachingTips(checkpoints) {
         detail: "Your arm doesn't get very bent as you bring the ball back. A tighter cocked position often adds velocity and control.",
         betterForm:
           'A strong load looks like a roughly right-angle bend at the elbow, with the ball up near your ear before you drive forward.',
+      })
+      watchCandidates.push({
+        id: 'load-elbow-watch',
+        ratio: (load.elbow - LOAD_ELBOW_MAX) / 30,
+        closeTitle: 'Arm cock is your strongest area',
+        closeDetail: 'Your elbow bend as you load is closer to that tight, powerful position than your other checks.',
       })
     } else {
       tips.push({
@@ -42,6 +51,12 @@ export function generateThrowCoachingTips(checkpoints) {
         betterForm:
           'At the moment the ball leaves your hand, your arm should be close to fully extended toward your target — like reaching out to shake someone\'s hand.',
       })
+      watchCandidates.push({
+        id: 'release-extension-watch',
+        ratio: (RELEASE_EXTENSION_TARGET - release.elbow) / (RELEASE_EXTENSION_TARGET - 90),
+        closeTitle: 'Release extension is your strongest area',
+        closeDetail: 'Your arm gets closer to full extension at release than your other checks — a bit more reach toward the target will finish it off.',
+      })
     } else {
       tips.push({
         id: 'release-extension-good',
@@ -60,6 +75,12 @@ export function generateThrowCoachingTips(checkpoints) {
         title: 'Soften your front leg on your stride',
         detail: 'Your front leg looks quite straight as your stride foot lands. A bit more flex there helps you transfer weight into the throw instead of losing power.',
         betterForm: 'A good stride lands with a slightly bent front knee that can absorb your weight and drive power up into the throw.',
+      })
+      watchCandidates.push({
+        id: 'stride-knee-watch',
+        ratio: (stride.kneeBend - KNEE_BEND_THRESHOLD) / 25,
+        closeTitle: 'Front-leg drive is your strongest area',
+        closeDetail: 'Your front knee bend on the stride is closer to ideal than your other checks.',
       })
     } else {
       tips.push({
@@ -82,6 +103,12 @@ export function generateThrowCoachingTips(checkpoints) {
         betterForm:
           'Try finishing your throw balanced over your front leg, with your back foot able to come through naturally instead of falling away.',
       })
+      watchCandidates.push({
+        id: 'balance-watch',
+        ratio: delta / BALANCE_THRESHOLD,
+        closeTitle: 'Balance is your strongest area',
+        closeDetail: 'You finish closer to your starting position than your other checks — keep building on that control.',
+      })
     } else {
       tips.push({
         id: 'balance-good',
@@ -92,8 +119,10 @@ export function generateThrowCoachingTips(checkpoints) {
     }
   }
 
-  if (tips.length === 0) {
-    tips.push({
+  const balanced = ensureOneStrength(tips, watchCandidates)
+
+  if (balanced.length === 0) {
+    balanced.push({
       id: 'no-signal',
       severity: 'info',
       title: "Couldn't get a clear read on your throw",
@@ -101,5 +130,5 @@ export function generateThrowCoachingTips(checkpoints) {
     })
   }
 
-  return tips
+  return balanced
 }

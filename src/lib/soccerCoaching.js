@@ -1,3 +1,5 @@
+import { ensureOneStrength } from './feedbackBalance'
+
 const KNEE_BEND_THRESHOLD = 165
 const HIP_ROTATION_TARGET = 15
 const CONTACT_LEAN_THRESHOLD = 12
@@ -10,6 +12,7 @@ export function generateKickCoachingTips(checkpoints) {
   if (!checkpoints) return []
   const { stance, plant, backswing, contact, finish } = checkpoints
   const tips = []
+  const watchCandidates = []
 
   if (plant?.kneeBend != null) {
     if (plant.kneeBend > KNEE_BEND_THRESHOLD) {
@@ -20,6 +23,12 @@ export function generateKickCoachingTips(checkpoints) {
         detail: 'Your standing leg looks quite straight as you plant next to the ball. A slight bend there helps with balance and control.',
         betterForm:
           "A good plant leg has a soft bend in the knee, almost like you're standing ready to absorb an impact — not locked straight.",
+      })
+      watchCandidates.push({
+        id: 'plant-knee-watch',
+        ratio: (plant.kneeBend - KNEE_BEND_THRESHOLD) / 25,
+        closeTitle: 'Plant-leg bend is your strongest area',
+        closeDetail: 'Your standing leg has more flex than your other checks — a bit more bend will help even more with balance.',
       })
     } else {
       tips.push({
@@ -42,6 +51,12 @@ export function generateKickCoachingTips(checkpoints) {
         betterForm:
           'Good technique often looks like the hips leading the leg through contact — think about turning your belt buckle toward the target as you strike the ball.',
       })
+      watchCandidates.push({
+        id: 'hip-rotation-watch',
+        ratio: (HIP_ROTATION_TARGET - delta) / HIP_ROTATION_TARGET,
+        closeTitle: 'Hip rotation is your strongest area',
+        closeDetail: 'Your hips rotate more through contact than your other checks show — keep driving them toward the target.',
+      })
     } else {
       tips.push({
         id: 'hip-rotation-good',
@@ -62,6 +77,12 @@ export function generateKickCoachingTips(checkpoints) {
         detail: 'Your body tilts noticeably by the time you strike the ball. Staying more upright through contact usually helps accuracy and power.',
         betterForm:
           'Solid technique usually has the body over or slightly ahead of the ball at contact, not leaning back away from it.',
+      })
+      watchCandidates.push({
+        id: 'contact-lean-watch',
+        ratio: delta / CONTACT_LEAN_THRESHOLD,
+        closeTitle: 'Posture through contact is your strongest area',
+        closeDetail: 'Your body stays more upright through contact than your other checks — a small improvement will lock it in.',
       })
     } else {
       tips.push({
@@ -84,6 +105,12 @@ export function generateKickCoachingTips(checkpoints) {
         betterForm:
           'A balanced finish often looks like a small hop or step to absorb the follow-through, landing roughly under your body rather than falling away from it.',
       })
+      watchCandidates.push({
+        id: 'balance-watch',
+        ratio: delta / BALANCE_THRESHOLD,
+        closeTitle: 'Finishing balance is your strongest area',
+        closeDetail: 'You land closer to your starting position than your other checks suggest.',
+      })
     } else {
       tips.push({
         id: 'balance-good',
@@ -94,8 +121,10 @@ export function generateKickCoachingTips(checkpoints) {
     }
   }
 
-  if (tips.length === 0) {
-    tips.push({
+  const balanced = ensureOneStrength(tips, watchCandidates)
+
+  if (balanced.length === 0) {
+    balanced.push({
       id: 'no-signal',
       severity: 'info',
       title: "Couldn't get a clear read on your kick",
@@ -103,5 +132,5 @@ export function generateKickCoachingTips(checkpoints) {
     })
   }
 
-  return tips
+  return balanced
 }

@@ -1,3 +1,5 @@
+import { ensureOneStrength } from './feedbackBalance'
+
 const RELEASE_EXTENSION_TARGET = 165
 const SETPOINT_ELBOW_LOW = 70
 const SETPOINT_ELBOW_HIGH = 110
@@ -12,6 +14,7 @@ export function generateShotCoachingTips(checkpoints) {
   if (!checkpoints) return []
   const { stance, load, setPoint, release, balance } = checkpoints
   const tips = []
+  const watchCandidates = []
 
   if (release?.elbow != null) {
     if (release.elbow < RELEASE_EXTENSION_TARGET) {
@@ -22,6 +25,12 @@ export function generateShotCoachingTips(checkpoints) {
         detail: "Your shooting arm isn't fully extended when the ball leaves your hand. Finishing straighter usually adds consistency and range.",
         betterForm:
           'At the moment the ball leaves your hand, your shooting arm should look almost fully straight, wrist relaxed and pointing down toward the basket ("reach into the cookie jar").',
+      })
+      watchCandidates.push({
+        id: 'release-extension-watch',
+        ratio: (RELEASE_EXTENSION_TARGET - release.elbow) / (RELEASE_EXTENSION_TARGET - 90),
+        closeTitle: 'Release extension is your strongest area',
+        closeDetail: 'Your arm gets closer to full extension at release than your other checks — a bit more reach and it\'ll be locked in.',
       })
     } else {
       tips.push({
@@ -42,6 +51,12 @@ export function generateShotCoachingTips(checkpoints) {
         detail: 'Your knees stay fairly straight before you shoot. Bending them more lets your legs help power the shot instead of just your arm.',
         betterForm: 'A good load looks like a quarter-to-half squat — bent enough that you could jump straight up from that position.',
       })
+      watchCandidates.push({
+        id: 'knee-bend-watch',
+        ratio: (load.kneeBend - KNEE_BEND_THRESHOLD) / 25,
+        closeTitle: 'Leg drive is your strongest area',
+        closeDetail: 'Your knee bend on the load is closer to ideal than your other checks — a bit more bend will unlock even more power.',
+      })
     } else {
       tips.push({
         id: 'knee-bend-good',
@@ -61,6 +76,13 @@ export function generateShotCoachingTips(checkpoints) {
         detail: 'Many shooters aim for roughly a right angle at the elbow before pushing the ball up. Yours looks noticeably more or less bent than that.',
         betterForm:
           "At the set point, many shooters cock the elbow to roughly 90°, like holding a waiter's tray at shoulder height, before extending straight up and out.",
+      })
+      const distance = setPoint.elbow < SETPOINT_ELBOW_LOW ? SETPOINT_ELBOW_LOW - setPoint.elbow : setPoint.elbow - SETPOINT_ELBOW_HIGH
+      watchCandidates.push({
+        id: 'setpoint-elbow-watch',
+        ratio: distance / 30,
+        closeTitle: 'Elbow position is your strongest area',
+        closeDetail: 'Your elbow angle at the set point is closer to that right-angle sweet spot than your other checks.',
       })
     } else {
       tips.push({
@@ -83,6 +105,12 @@ export function generateShotCoachingTips(checkpoints) {
         betterForm:
           'Good shooters often land in close to the same footprint they jumped from — try freezing your follow-through and checking if you’re still balanced over your feet.',
       })
+      watchCandidates.push({
+        id: 'balance-watch',
+        ratio: delta / BALANCE_THRESHOLD,
+        closeTitle: 'Balance is your strongest area',
+        closeDetail: 'You land closer to your takeoff spot than your other checks suggest — keep working on repeating that landing.',
+      })
     } else {
       tips.push({
         id: 'balance-good',
@@ -93,8 +121,10 @@ export function generateShotCoachingTips(checkpoints) {
     }
   }
 
-  if (tips.length === 0) {
-    tips.push({
+  const balanced = ensureOneStrength(tips, watchCandidates)
+
+  if (balanced.length === 0) {
+    balanced.push({
       id: 'no-signal',
       severity: 'info',
       title: "Couldn't get a clear read on your shot",
@@ -102,5 +132,5 @@ export function generateShotCoachingTips(checkpoints) {
     })
   }
 
-  return tips
+  return balanced
 }
