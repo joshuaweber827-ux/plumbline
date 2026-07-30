@@ -67,6 +67,12 @@ function App() {
   const [currentKeypoints, setCurrentKeypoints] = useState(null)
   const [analysis, setAnalysis] = useState({ status: 'idle', progress: 0, checkpoints: null })
 
+  // Per-sport video + analysis, so switching tabs and coming back restores
+  // where you left off instead of starting over. Keyed by sport.id; only
+  // populated for sports that have had a video loaded at least once.
+  const [sessions, setSessions] = useState({})
+  const pendingSeekRef = useRef(null)
+
   const { detector, status: modelStatus } = usePoseModel()
 
   useEffect(() => {
@@ -82,6 +88,7 @@ function App() {
   const handleFileSelected = useCallback(
     (file) => {
       if (videoUrl) URL.revokeObjectURL(videoUrl)
+      pendingSeekRef.current = null
       setVideoUrl(URL.createObjectURL(file))
       setDuration(0)
       setCurrentTime(0)
@@ -97,18 +104,32 @@ function App() {
   const handleSelectSport = useCallback(
     (nextSport) => {
       if (nextSport.id === sport.id) return
-      if (videoUrl) URL.revokeObjectURL(videoUrl)
+
+      // Stash the sport we're leaving so its video/analysis are there when
+      // we come back — object URLs are intentionally NOT revoked here since
+      // we still need them.
+      setSessions((prev) => ({
+        ...prev,
+        [sport.id]: {
+          videoUrl,
+          currentTime: videoRef.current?.currentTime ?? currentTime,
+          analysis,
+        },
+      }))
+
+      const saved = sessions[nextSport.id]
       setSport(nextSport)
-      setVideoUrl(null)
+      setVideoUrl(saved?.videoUrl ?? null)
       setDuration(0)
-      setCurrentTime(0)
+      setCurrentTime(saved?.currentTime ?? 0)
       setIsPlaying(false)
       setAspectRatio(null)
       setCurrentKeypoints(null)
-      setAnalysis({ status: 'idle', progress: 0, checkpoints: null })
+      setAnalysis(saved?.analysis ?? { status: 'idle', progress: 0, checkpoints: null })
+      pendingSeekRef.current = saved?.currentTime ?? null
       clear()
     },
-    [sport, videoUrl, clear],
+    [sport, videoUrl, currentTime, analysis, sessions, clear],
   )
 
   const handleLoadedMetadata = useCallback(() => {
@@ -119,6 +140,11 @@ function App() {
     if (annotationCanvasRef.current) {
       annotationCanvasRef.current.width = video.videoWidth
       annotationCanvasRef.current.height = video.videoHeight
+    }
+    if (pendingSeekRef.current != null) {
+      video.currentTime = pendingSeekRef.current
+      setCurrentTime(pendingSeekRef.current)
+      pendingSeekRef.current = null
     }
   }, [])
 
